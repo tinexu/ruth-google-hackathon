@@ -18,6 +18,8 @@ export interface Pet {
   speech: string;
   /** Overall health report card grade, e.g. "B+" */
   grade: string;
+  /** Total XP needed to reach the next level (drives the Teach page progress bar). */
+  nextLevelXp?: number;
 }
 
 export type StatColor = 'sun' | 'pip-blue' | 'coral' | 'mint';
@@ -226,4 +228,62 @@ export type BattleResult = PictureTwinResult | LiteralRobotResult | TabooResult;
 
 export interface ApiError {
   error: string;
+}
+
+// ---------- Teach Pip ----------
+
+export type TeachChoiceLetter = 'A' | 'B' | 'C' | 'D';
+
+/** One example card Pip was trained on, e.g. "Password" -> "keep private". */
+export interface TeachExample {
+  label: string;
+  verdict: string;
+}
+
+export interface TeachChoice {
+  letter: TeachChoiceLetter;
+  example: TeachExample;
+  /** fix = fills the blind spot; repeat = same blind spot again; unsafe = teaches a bad habit. */
+  kind: 'fix' | 'repeat' | 'unsafe';
+}
+
+/** Full card as stored in backend/data/teach.json, including the answer key. */
+export interface TeachCard {
+  id: string;
+  category: string;
+  question: string;
+  examples: TeachExample[];
+  /** What Pip sees or hears that trips it up. */
+  testCase: string;
+  pipMistake: string;
+  uhOh: string;
+  choices: TeachChoice[];
+  /** Pip's reaction to the same test case once the blind spot is fixed. */
+  pipFixed: string;
+  explanation: string;
+}
+
+/** What the browser sees before answering: no `kind`, so no answer key. */
+export interface PublicTeachCard extends Omit<TeachCard, 'choices' | 'pipFixed' | 'explanation'> {
+  choices: { letter: TeachChoiceLetter; example: TeachExample }[];
+}
+
+export interface TeachResponse {
+  cards: PublicTeachCard[];
+}
+
+export interface TeachAnswerRequest {
+  letter: TeachChoiceLetter;
+}
+
+export interface TeachAnswerResult {
+  cardId: string;
+  correct: boolean;
+  picked: TeachChoice;
+  /** Pip's line after this pick (fixed quote if correct). */
+  pipSays: string;
+  feedback: string;
+  /** Only sent once the card is answered correctly. */
+  explanation?: string;
+  xpEarned: number;
 }

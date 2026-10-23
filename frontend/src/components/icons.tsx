@@ -120,3 +120,9 @@ export const TabooIcon = (p: IconProps) => (
 export const ClockIcon = (p: IconProps) => (
   <svg {...base(p)}><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2M10 2h4" /></svg>
 );
+export const GradCapIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M3 8l9-4 9 4-9 4z" /><path d="M7 10v5c0 1.5 2.5 3 5 3s5-1.5 5-3v-5" /></svg>
+);
+export const PlusIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M12 5v14M5 12h14" /></svg>
+);

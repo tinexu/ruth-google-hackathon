@@ -10,7 +10,8 @@
     "levelTitle": "Curious explorer",
     "mood": "curious",
     "speech": "I learned AI can make up facts! Can we practice catching them?",
-    "grade": "B+"
+    "grade": "B+",
+    "nextLevelXp": 500
   },
   "stats": [
     {
