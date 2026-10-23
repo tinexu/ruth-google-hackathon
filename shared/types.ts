@@ -23,7 +23,7 @@ export interface Pet {
 export type StatColor = 'sun' | 'pip-blue' | 'coral' | 'mint';
 
 export interface Stat {
-  key: 'energy' | 'smarts' | 'fairness' | 'promptPower' | 'friendship';
+  key: 'energy' | 'brain' | 'muscle' | 'promptPower' | 'friendship';
   label: string;
   value: number; // 0-100
   color: StatColor;

@@ -1,14 +1,23 @@
 import { NavLink } from 'react-router-dom';
 import { PipMascot } from './PipMascot';
 import { Pill } from './Pill';
-import { FeedIcon, ZapIcon, PawIcon, UsersIcon, UserIcon, FlameIcon } from './icons';
+import {
+  FeedIcon,
+  ZapIcon,
+  PawIcon,
+  UsersIcon,
+  DumbbellIcon,
+  SettingsIcon,
+  FlameIcon,
+} from './icons';
 
 const TABS = [
   { to: '/feed', label: 'Feed', icon: FeedIcon },
+  { to: '/train', label: 'Train', icon: DumbbellIcon },
   { to: '/battle', label: 'Battle', icon: ZapIcon },
   { to: '/', label: 'My Pip', icon: PawIcon, end: true },
   { to: '/community', label: 'Community', icon: UsersIcon },
-  { to: '/me', label: 'Me', icon: UserIcon },
+  { to: '/settings', label: 'Settings', icon: SettingsIcon },
 ];
 
 interface TopNavProps {

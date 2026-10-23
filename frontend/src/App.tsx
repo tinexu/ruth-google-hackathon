@@ -72,9 +72,10 @@ export default function App() {
       <Route element={<Layout data={data} />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/train" element={<PlaceholderPage title="Train" file="src/pages/TrainPage.tsx" />} />
         <Route path="/battle" element={<PlaceholderPage title="Prompt Battle" file="src/pages/BattlePage.tsx" />} />
         <Route path="/community" element={<PlaceholderPage title="Community" file="src/pages/CommunityPage.tsx" />} />
-        <Route path="/me" element={<PlaceholderPage title="Me" file="src/pages/MePage.tsx" />} />
+        <Route path="/settings" element={<PlaceholderPage title="Settings" file="src/pages/SettingsPage.tsx" />} />
       </Route>
     </Routes>
   );
