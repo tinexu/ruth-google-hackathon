@@ -8,6 +8,7 @@ import { HomePage } from './pages/HomePage';
 import { FeedPage } from './pages/FeedPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { BattlePage } from './pages/BattlePage';
+import { TeachPage } from './pages/TeachPage';
 import type { AppOutletContext } from './lib/outlet';
 
 function Layout({ data, addXp }: { data: HomeData; addXp: (xp: number) => void }) {
@@ -80,6 +81,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/battle" element={<BattlePage />} />
+        <Route path="/teach" element={<TeachPage />} />
         <Route path="/community" element={<PlaceholderPage title="Community" file="src/pages/CommunityPage.tsx" />} />
         <Route path="/me" element={<PlaceholderPage title="Me" file="src/pages/MePage.tsx" />} />
       </Route>

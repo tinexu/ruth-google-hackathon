@@ -4,6 +4,10 @@ import type {
   BattlesResponse,
   HomeData,
   SubmitRequest,
+  TeachAnswerRequest,
+  TeachAnswerResult,
+  TeachChoiceLetter,
+  TeachResponse,
 } from '@shared/types';
 
 export async function fetchHomeData(): Promise<HomeData> {
@@ -42,5 +46,20 @@ export function submitBattlePrompt(challengeId: string, prompt: string): Promise
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ prompt } satisfies SubmitRequest),
+  });
+}
+
+export function fetchTeachCards(): Promise<TeachResponse> {
+  return requestJson<TeachResponse>('/api/teach');
+}
+
+export function answerTeachCard(
+  cardId: string,
+  letter: TeachChoiceLetter,
+): Promise<TeachAnswerResult> {
+  return requestJson<TeachAnswerResult>(`/api/teach/${encodeURIComponent(cardId)}/answer`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ letter } satisfies TeachAnswerRequest),
   });
 }

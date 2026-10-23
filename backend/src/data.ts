@@ -1,11 +1,12 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { BattlesFile, HomeData } from '../../shared/types.js';
+import type { BattlesFile, HomeData, TeachCard } from '../../shared/types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const demoPath = path.join(__dirname, '..', 'data', 'demo.json');
 const battlesPath = path.join(__dirname, '..', 'data', 'battles.json');
+const teachPath = path.join(__dirname, '..', 'data', 'teach.json');
 
 /**
  * Loads the demo home-page data from disk on every call so edits to
@@ -24,4 +25,10 @@ export function loadHomeData(): HomeData {
 export function loadBattles(): BattlesFile {
   const raw = readFileSync(battlesPath, 'utf-8');
   return JSON.parse(raw) as BattlesFile;
+}
+
+/** Loads the Teach Pip cards, including which choice fixes each blind spot. */
+export function loadTeachCards(): TeachCard[] {
+  const raw = readFileSync(teachPath, 'utf-8');
+  return (JSON.parse(raw) as { cards: TeachCard[] }).cards;
 }
