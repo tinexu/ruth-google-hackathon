@@ -1,12 +1,13 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { BattlesFile, HomeData, TeachCard } from '../../shared/types.js';
+import type { BattlesFile, CommunityData, HomeData, TeachCard } from '../../shared/types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const demoPath = path.join(__dirname, '..', 'data', 'demo.json');
 const battlesPath = path.join(__dirname, '..', 'data', 'battles.json');
 const teachPath = path.join(__dirname, '..', 'data', 'teach.json');
+const communityPath = path.join(__dirname, '..', 'data', 'community.json');
 
 /**
  * Loads the demo home-page data from disk on every call so edits to
@@ -31,4 +32,10 @@ export function loadBattles(): BattlesFile {
 export function loadTeachCards(): TeachCard[] {
   const raw = readFileSync(teachPath, 'utf-8');
   return (JSON.parse(raw) as { cards: TeachCard[] }).cards;
+}
+
+/** Loads the class leaderboard, growth-stage reference, and next-upgrade copy. */
+export function loadCommunityData(): CommunityData {
+  const raw = readFileSync(communityPath, 'utf-8');
+  return JSON.parse(raw) as CommunityData;
 }

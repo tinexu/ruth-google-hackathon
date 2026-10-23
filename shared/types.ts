@@ -325,3 +325,46 @@ export interface TeachAnswerResult {
   explanation?: string;
   xpEarned: number;
 }
+
+// ---------- Community ----------
+
+export type PetTier = 'sprout' | 'explorer' | 'champ' | 'legend';
+
+export interface LeaderboardEntry {
+  rank: number;
+  petName: string;
+  ownerName: string;
+  /** This is the signed-in kid's own pet. */
+  isYou?: boolean;
+  justJoined?: boolean;
+  level: number;
+  levelTitle: string;
+  tier: PetTier;
+  xp: number;
+  color: StatColor;
+}
+
+export interface GrowthStage {
+  tier: PetTier;
+  name: string;
+  levelRange: string;
+  description: string;
+}
+
+export interface NextUpgrade {
+  level: number;
+  title: string;
+  description: string;
+  xpToGo: number;
+  progressPercent: number;
+  feedCardsEstimate: number;
+}
+
+export interface CommunityData {
+  className: string;
+  leaderboard: LeaderboardEntry[];
+  growthStages: GrowthStage[];
+  /** Which growth stage card gets the "You are here" badge. */
+  currentTier: PetTier;
+  nextUpgrade: NextUpgrade;
+}

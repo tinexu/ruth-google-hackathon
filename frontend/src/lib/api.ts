@@ -2,6 +2,7 @@ import type {
   ApiError,
   BattleResult,
   BattlesResponse,
+  CommunityData,
   HomeData,
   SubmitRequest,
   TeachAnswerRequest,
@@ -76,4 +77,8 @@ export function trainTeachCard(
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ examples } satisfies TeachTrainRequest),
   });
+}
+
+export function fetchCommunityData(): Promise<CommunityData> {
+  return requestJson<CommunityData>('/api/community');
 }

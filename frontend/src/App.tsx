@@ -7,9 +7,9 @@ import { PipMascot } from './components/PipMascot';
 import { HomePage } from './pages/HomePage';
 import { FeedPage } from './pages/FeedPage';
 import { SettingsPage } from './pages/SettingsPage';
-import { PlaceholderPage } from './pages/PlaceholderPage';
 import { BattlePage } from './pages/BattlePage';
 import { TeachPage } from './pages/TeachPage';
+import { CommunityPage } from './pages/CommunityPage';
 import type { AppOutletContext } from './lib/outlet';
 
 function Layout({ data, addXp }: { data: HomeData; addXp: (xp: number) => void }) {
@@ -84,7 +84,7 @@ export default function App() {
         <Route path="/train" element={<TeachPage />} />
         <Route path="/teach" element={<Navigate to="/train" replace />} />
         <Route path="/battle" element={<BattlePage />} />
-        <Route path="/community" element={<PlaceholderPage title="Community" file="src/pages/CommunityPage.tsx" />} />
+        <Route path="/community" element={<CommunityPage />} />
         <Route path="/settings" element={<SettingsPage />} />
       </Route>
     </Routes>

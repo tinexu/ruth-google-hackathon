@@ -1,11 +1,12 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
-export type ButtonVariant = 'sun' | 'coral' | 'white';
+export type ButtonVariant = 'sun' | 'coral' | 'white' | 'mint';
 
 const variantClasses: Record<ButtonVariant, string> = {
   sun: 'bg-sun hover:bg-sun active:bg-sun',
   coral: 'bg-coral hover:bg-coral active:bg-coral',
   white: 'bg-white hover:bg-white active:bg-white',
+  mint: 'bg-mint hover:bg-mint active:bg-mint',
 };
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -27,7 +28,7 @@ export function Button({
   return (
     <button
       {...rest}
-      className={`focus-ring group inline-flex items-center justify-center gap-2 rounded-2xl border-[2.5px] border-ink px-5 py-3 font-heading text-base font-bold text-ink shadow-[0_5px_0_#1B2140] transition-transform duration-100 ease-out hover:-translate-y-0.5 hover:shadow-[0_7px_0_#1B2140] active:translate-y-[3px] active:shadow-[0_1px_0_#1B2140] ${variantClasses[variant]} ${className}`}
+      className={`focus-ring group inline-flex items-center justify-center gap-2 rounded-2xl border-[2.5px] border-ink px-5 py-3 font-heading text-base font-bold text-ink shadow-[0_5px_0_#1B2140] transition-transform duration-100 ease-out hover:-translate-y-0.5 hover:shadow-[0_7px_0_#1B2140] active:translate-y-[3px] active:shadow-[0_1px_0_#1B2140] disabled:pointer-events-none disabled:opacity-60 disabled:shadow-[0_3px_0_#1B2140] disabled:hover:translate-y-0 ${variantClasses[variant]} ${className}`}
     >
       {icon}
       {children}

@@ -108,6 +108,13 @@ export const CrossIcon = (p: IconProps) => (
 export const ArrowRightIcon = (p: IconProps) => (
   <svg {...base({ strokeWidth: 2.6, ...p })}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
 );
+export const TrophyIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M7 4h10v5a5 5 0 0 1-10 0z" />
+    <path d="M7 5H4a3 3 0 0 0 3 5M17 5h3a3 3 0 0 1-3 5" />
+    <path d="M12 14v4M9 21h6M9.5 18h5" />
+  </svg>
+);
 export const DumbbellIcon = (p: IconProps) => (
   <svg {...base(p)}>
     <path d="M2 10v4" />
