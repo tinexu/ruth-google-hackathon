@@ -15,5 +15,6 @@ homeRouter.get('/home', (_req, res) => {
 });
 
 // Reserved for Gemini-powered routes (requires GEMINI_API_KEY in .env),
-// e.g. generating a new feed challenge or judging a Prompt Battle round.
+// e.g. generating a new feed challenge. Prompt Battle judging lives in
+// src/grading/ (see src/ai/gemini.ts).
 // homeRouter.post('/generate-challenge', async (req, res) => { ... })

@@ -5,6 +5,8 @@ import { existsSync } from 'node:fs';
 import path from 'node:path';
 import { homeRouter } from './routes/home.js';
 import { feedRouter } from './routes/feed.js';
+import { battlesRouter } from './routes/battles.js';
+import { teachRouter } from './routes/teach.js';
 
 const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
@@ -14,6 +16,8 @@ app.use(express.json({ limit: '4kb' }));
 
 app.use('/api', homeRouter);
 app.use('/api', feedRouter);
+app.use('/api', battlesRouter);
+app.use('/api', teachRouter);
 
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true });

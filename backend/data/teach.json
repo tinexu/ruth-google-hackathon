@@ -1,0 +1,425 @@
+{
+  "cards": [
+    {
+      "id": "deepfakes-real-video",
+      "category": "Deepfakes",
+      "question": "Teach Pip: is this video real or fake?",
+      "examples": [
+        {
+          "label": "Dog-ear filter",
+          "verdict": "fake"
+        },
+        {
+          "label": "Huge cartoon eyes",
+          "verdict": "fake"
+        },
+        {
+          "label": "Rainbow face paint",
+          "verdict": "fake"
+        }
+      ],
+      "trainPrompt": "Teach me how to tell real videos from fake ones!",
+      "trainHelp": "Type something you might notice in a video, then tell Pip what it means.",
+      "labels": [
+        "real",
+        "fake"
+      ],
+      "media": {
+        "kind": "video",
+        "scene": "deepfake-singer",
+        "alt": "Music video of a singer on stage. The edges of her jaw blur and shimmer when she moves, and the captions say her voice sounds flat and robotic."
+      },
+      "testCase": "A new music video from a famous singer. Watch her jaw and listen to her voice.",
+      "pipMistake": "Totally real!",
+      "uhOh": "Uh oh. None of your examples showed Pip what a realistic deepfake looks like, so it trusted a normal-looking face. Which card should you add?",
+      "choices": [
+        {
+          "letter": "A",
+          "example": {
+            "label": "Bunny-ear filter",
+            "verdict": "fake"
+          },
+          "kind": "repeat"
+        },
+        {
+          "letter": "B",
+          "example": {
+            "label": "Blurry edges, flat voice",
+            "verdict": "could be fake"
+          },
+          "kind": "fix"
+        },
+        {
+          "letter": "C",
+          "example": {
+            "label": "Looks normal",
+            "verdict": "real"
+          },
+          "kind": "unsafe"
+        },
+        {
+          "letter": "D",
+          "example": {
+            "label": "Famous person",
+            "verdict": "real"
+          },
+          "kind": "unsafe"
+        }
+      ],
+      "pipFixed": "Blurry jaw, flat voice... could be a deepfake!",
+      "explanation": "Real deepfakes don't look silly. Clues like blurry edges, odd teeth or hands, and a flat voice matter more than whether a face looks normal.",
+      "fixVerdict": "fake",
+      "fixKeywords": [
+        "blur",
+        "blurry",
+        "blurred",
+        "edge",
+        "edges",
+        "jaw",
+        "teeth",
+        "hands",
+        "fingers",
+        "flat",
+        "robot",
+        "robotic",
+        "glitch",
+        "glitchy",
+        "flicker",
+        "lip sync",
+        "lips",
+        "shimmer",
+        "weird voice",
+        "voice sounds",
+        "doesn't blink",
+        "no blinking",
+        "melting"
+      ]
+    },
+    {
+      "id": "privacy-safe-to-post",
+      "category": "Sharing & Privacy",
+      "question": "Teach Pip: what's safe to post online?",
+      "examples": [
+        {
+          "label": "Password",
+          "verdict": "keep private"
+        },
+        {
+          "label": "PIN code",
+          "verdict": "keep private"
+        },
+        {
+          "label": "Locker combo",
+          "verdict": "keep private"
+        }
+      ],
+      "trainPrompt": "Teach me what's OK to share online!",
+      "trainHelp": "Type a kind of information, then tell Pip if it's private.",
+      "labels": [
+        "keep private",
+        "OK to post"
+      ],
+      "testCase": "Jaya types: \"Come over to 42 Maple St after school!\"",
+      "pipMistake": "Posting it now!",
+      "uhOh": "Uh oh. Your examples didn't cover home addresses, so Pip is about to share one. Which card should you add?",
+      "choices": [
+        {
+          "letter": "A",
+          "example": {
+            "label": "Wi-Fi password",
+            "verdict": "keep private"
+          },
+          "kind": "repeat"
+        },
+        {
+          "letter": "B",
+          "example": {
+            "label": "Phone number",
+            "verdict": "OK to post"
+          },
+          "kind": "unsafe"
+        },
+        {
+          "letter": "C",
+          "example": {
+            "label": "Home address",
+            "verdict": "keep private"
+          },
+          "kind": "fix"
+        },
+        {
+          "letter": "D",
+          "example": {
+            "label": "Live location",
+            "verdict": "share with followers"
+          },
+          "kind": "unsafe"
+        }
+      ],
+      "pipFixed": "Wait, that's private. Not posting!",
+      "explanation": "Secrets aren't just codes. Your address, phone number and live location can lead someone right to you, so Pip keeps them private now too.",
+      "fixVerdict": "keep private",
+      "fixKeywords": [
+        "address",
+        "street",
+        "where i live",
+        "where you live",
+        "home",
+        "house",
+        "phone",
+        "number",
+        "location",
+        "live location",
+        "school",
+        "birthday",
+        "full name",
+        "last name"
+      ]
+    },
+    {
+      "id": "voice-clone-call",
+      "category": "Voice Cloning",
+      "question": "Teach Pip: who is really calling?",
+      "examples": [
+        {
+          "label": "Mom's voice",
+          "verdict": "trust it"
+        },
+        {
+          "label": "Grandpa's laugh",
+          "verdict": "trust it"
+        },
+        {
+          "label": "Says my nickname",
+          "verdict": "trust it"
+        }
+      ],
+      "trainPrompt": "Teach me how to tell who's really calling!",
+      "trainHelp": "Type a clue about a phone call, then tell Pip if it can be trusted.",
+      "labels": [
+        "trust it",
+        "don't trust it"
+      ],
+      "testCase": "An unknown number calls. \"Mom\" says she's in trouble and needs gift card codes right now.",
+      "pipMistake": "Hi Mom! Sending them!",
+      "uhOh": "Uh oh. Your examples didn't teach Pip that AI can copy a voice, so it trusted a familiar-sounding caller. Which card should you add?",
+      "choices": [
+        {
+          "letter": "A",
+          "example": {
+            "label": "Unknown number in a rush",
+            "verdict": "ask safe word, call back"
+          },
+          "kind": "fix"
+        },
+        {
+          "letter": "B",
+          "example": {
+            "label": "Sounds like Dad",
+            "verdict": "it's Dad"
+          },
+          "kind": "repeat"
+        },
+        {
+          "letter": "C",
+          "example": {
+            "label": "Crying voice",
+            "verdict": "send money fast"
+          },
+          "kind": "unsafe"
+        },
+        {
+          "letter": "D",
+          "example": {
+            "label": "Knows my name",
+            "verdict": "trust it"
+          },
+          "kind": "unsafe"
+        }
+      ],
+      "pipFixed": "What's our family safe word? I'll call you back.",
+      "explanation": "AI can copy a voice from a few seconds of video. A strange number plus a panicky rush is the clue: ask for your family's safe word or hang up and call back.",
+      "fixVerdict": "don't trust it",
+      "fixKeywords": [
+        "unknown",
+        "strange number",
+        "weird number",
+        "new number",
+        "rush",
+        "rushing",
+        "hurry",
+        "urgent",
+        "money",
+        "gift card",
+        "safe word",
+        "call back",
+        "asks for",
+        "fake voice",
+        "ai voice",
+        "copied voice",
+        "cloned"
+      ]
+    },
+    {
+      "id": "scam-perfect-grammar",
+      "category": "Scam Identification",
+      "question": "Teach Pip: is this message a scam?",
+      "examples": [
+        {
+          "label": "\"Yuo won $$$\"",
+          "verdict": "scam"
+        },
+        {
+          "label": "\"Clik hear now\"",
+          "verdict": "scam"
+        },
+        {
+          "label": "\"Frree robux!!\"",
+          "verdict": "scam"
+        }
+      ],
+      "trainPrompt": "Teach me how to spot scam messages!",
+      "trainHelp": "Type something you might see in a message, then tell Pip if it's a scam.",
+      "labels": [
+        "scam",
+        "not a scam"
+      ],
+      "testCase": "A perfectly written email from support@g00gle-help.co: \"Reset your password within 10 minutes or lose your account.\"",
+      "pipMistake": "No typos, so it's safe!",
+      "uhOh": "Uh oh. Your examples didn't show Pip a scam with perfect spelling, so it trusted this one. Which card should you add?",
+      "choices": [
+        {
+          "letter": "A",
+          "example": {
+            "label": "\"Fre gift card\"",
+            "verdict": "scam"
+          },
+          "kind": "repeat"
+        },
+        {
+          "letter": "B",
+          "example": {
+            "label": "Perfect grammar",
+            "verdict": "safe"
+          },
+          "kind": "unsafe"
+        },
+        {
+          "letter": "C",
+          "example": {
+            "label": "Urgent link",
+            "verdict": "click fast"
+          },
+          "kind": "unsafe"
+        },
+        {
+          "letter": "D",
+          "example": {
+            "label": "Weird sender + timer",
+            "verdict": "scam"
+          },
+          "kind": "fix"
+        }
+      ],
+      "pipFixed": "g00gle with zeros? And a timer? Scam!",
+      "explanation": "Spelling isn't a reliable clue anymore. Check who really sent it, and treat panic timers and password links as red flags.",
+      "fixVerdict": "scam",
+      "fixKeywords": [
+        "sender",
+        "email address",
+        "from address",
+        "weird address",
+        "fake address",
+        "link",
+        "password",
+        "urgent",
+        "timer",
+        "minutes",
+        "countdown",
+        "hurry",
+        "act now",
+        "lose your account",
+        "reset"
+      ]
+    },
+    {
+      "id": "homework-help-or-cheat",
+      "category": "AI Doing Your Homework",
+      "question": "Teach Pip: is this helping or cheating?",
+      "examples": [
+        {
+          "label": "Explain fractions",
+          "verdict": "helping"
+        },
+        {
+          "label": "Quiz me",
+          "verdict": "helping"
+        },
+        {
+          "label": "Check my spelling",
+          "verdict": "helping"
+        }
+      ],
+      "trainPrompt": "Teach me when AI is helping with homework and when it's cheating!",
+      "trainHelp": "Type a way to use AI for homework, then tell Pip if it's helping or cheating.",
+      "labels": [
+        "helping",
+        "cheating"
+      ],
+      "testCase": "Jaya asks: \"Write my whole book report on Hatchet.\"",
+      "pipMistake": "Helping! Here's 500 words.",
+      "uhOh": "Uh oh. Your examples didn't show Pip where helping turns into cheating, so it wrote the whole report. Which card should you add?",
+      "choices": [
+        {
+          "letter": "A",
+          "example": {
+            "label": "Make flashcards",
+            "verdict": "helping"
+          },
+          "kind": "repeat"
+        },
+        {
+          "letter": "B",
+          "example": {
+            "label": "Write my whole essay",
+            "verdict": "cheating"
+          },
+          "kind": "fix"
+        },
+        {
+          "letter": "C",
+          "example": {
+            "label": "Do my math homework",
+            "verdict": "helping"
+          },
+          "kind": "unsafe"
+        },
+        {
+          "letter": "D",
+          "example": {
+            "label": "Copy this answer",
+            "verdict": "helping"
+          },
+          "kind": "unsafe"
+        }
+      ],
+      "pipFixed": "I can't write it for you, but I can help you outline it!",
+      "explanation": "Hints, quizzes and feedback on your own draft help you learn. When AI does the whole thing, you skip the learning, and that's cheating.",
+      "fixVerdict": "cheating",
+      "fixKeywords": [
+        "whole",
+        "entire",
+        "write my",
+        "write the",
+        "essay",
+        "report",
+        "do my",
+        "answers",
+        "copy",
+        "solve it",
+        "finish my",
+        "for me"
+      ]
+    }
+  ]
+}

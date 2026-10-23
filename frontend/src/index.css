@@ -20,6 +20,12 @@
   --color-nav-border: #2a3157;
   --color-nav-chip: #2a3157;
   --color-nav-muted: #a9b1d6;
+
+  /* used by Prompt Battles */
+  --color-coral-soft: #fff1ec;
+  --color-coral-ink: #a3361a;
+  --color-mint-light: #d7f5e4;
+  --color-sun-ink: #4a3a05;
 }
 
 html,
@@ -70,4 +76,70 @@ h4,
   outline: 3px solid var(--color-pip-blue);
   outline-offset: 2px;
   border-radius: 10px;
+}
+
+/* result panels slide in when a Prompt Battle round is graded */
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.pop-in {
+  animation: pop-in 260ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop-in {
+    animation: none;
+  }
+}
+
+/* Teach Pip deepfake video: a shimmering jaw line and a mouth that sings */
+@keyframes deepfake-glitch {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: translateX(0);
+  }
+  30% {
+    opacity: 0.4;
+    transform: translateX(3px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes deepfake-mouth {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.35);
+  }
+}
+
+.deepfake-glitch {
+  animation: deepfake-glitch 0.9s steps(3) infinite;
+}
+
+.deepfake-mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: deepfake-mouth 0.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deepfake-glitch,
+  .deepfake-mouth {
+    animation: none;
+  }
 }

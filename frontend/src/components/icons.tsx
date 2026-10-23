@@ -125,3 +125,21 @@ export const SettingsIcon = (p: IconProps) => (
     <path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
   </svg>
 );
+export const ImageIcon = (p: IconProps) => (
+  <svg {...base(p)}><rect x="3" y="5" width="18" height="14" rx="3" /><circle cx="9" cy="10" r="1.8" /><path d="M21 16l-5-5-8 8" /></svg>
+);
+export const StepsIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M9 6h11M9 12h11M9 18h11" /><path d="M4 6h.5M4 12h.5M4 18h.5" /></svg>
+);
+export const TabooIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M4 5h16v11H9l-5 4z" /><path d="M9 8.5l6 4M15 8.5l-6 4" /></svg>
+);
+export const ClockIcon = (p: IconProps) => (
+  <svg {...base(p)}><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2M10 2h4" /></svg>
+);
+export const GradCapIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M3 8l9-4 9 4-9 4z" /><path d="M7 10v5c0 1.5 2.5 3 5 3s5-1.5 5-3v-5" /></svg>
+);
+export const PlusIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M12 5v14M5 12h14" /></svg>
+);

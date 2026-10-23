@@ -9,7 +9,8 @@
     "level": 4,
     "levelTitle": "Curious explorer",
     "mood": "curious",
-    "speech": "I learned AI can make up facts! Can we practice catching them?"
+    "speech": "I learned AI can make up facts! Can we practice catching them?",
+    "nextLevelXp": 500
   },
   "stats": [
     {
