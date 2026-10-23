@@ -1,0 +1,5 @@
+{
+  "name": "@pip/shared",
+  "private": true,
+  "type": "module"
+}

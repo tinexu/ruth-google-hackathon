@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Atkinson+Hyperlegible:wght@400;700&display=swap');
+@import 'tailwindcss';
+
+/* ---- Pip design kit tokens ---- */
+@theme {
+  --font-heading: 'Baloo 2', ui-rounded, system-ui, sans-serif;
+  --font-body: 'Atkinson Hyperlegible', system-ui, sans-serif;
+
+  --color-ink: #1b2140;
+  --color-ground: #f3f5ff;
+  --color-sun: #ffc93c;
+  --color-pip-blue: #5b86ff;
+  --color-pip-blue-light: #dce5ff;
+  --color-coral: #ff7a59;
+  --color-coral-light: #ffe1d6;
+  --color-mint: #2fbf71;
+  --color-muted: #5a6385;
+  --color-border: #dde3f5;
+  --color-nav: #0e1226;
+  --color-nav-border: #2a3157;
+  --color-nav-chip: #2a3157;
+  --color-nav-muted: #a9b1d6;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ground);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+/* Idle bounce for the Pip mascot, disabled for reduced-motion users */
+@keyframes pip-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.animate-pip-bounce {
+  animation: pip-bounce 3.2s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-pip-bounce {
+    animation: none;
+  }
+}
+
+/* visible keyboard focus ring, matches ink outline language */
+.focus-ring:focus-visible {
+  outline: 3px solid var(--color-pip-blue);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
