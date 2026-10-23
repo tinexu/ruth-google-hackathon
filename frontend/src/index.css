@@ -99,3 +99,47 @@ h4,
     animation: none;
   }
 }
+
+/* Teach Pip deepfake video: a shimmering jaw line and a mouth that sings */
+@keyframes deepfake-glitch {
+  0%,
+  100% {
+    opacity: 0.9;
+    transform: translateX(0);
+  }
+  30% {
+    opacity: 0.4;
+    transform: translateX(3px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-2px);
+  }
+}
+
+@keyframes deepfake-mouth {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.35);
+  }
+}
+
+.deepfake-glitch {
+  animation: deepfake-glitch 0.9s steps(3) infinite;
+}
+
+.deepfake-mouth {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: deepfake-mouth 0.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .deepfake-glitch,
+  .deepfake-mouth {
+    animation: none;
+  }
+}

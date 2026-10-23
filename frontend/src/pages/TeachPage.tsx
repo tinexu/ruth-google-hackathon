@@ -186,7 +186,7 @@ function TeachSession({
           result={result}
           given={given}
           trained={trained}
-          onGive={(label) => setGiven((g) => (g.includes(label) ? g : [...g, label]))}
+          onGive={(label) => setGiven((g) => [...g, label])}
           onResetExamples={() => setGiven([])}
           onTrain={() => setTrained(true)}
           checking={checking}
