@@ -238,8 +238,6 @@ export type TeachChoiceLetter = 'A' | 'B' | 'C' | 'D';
 export interface TeachExample {
   label: string;
   verdict: string;
-  /** Training step only: what kind of example the kid should type, e.g. "a silly face filter". */
-  hint?: string;
 }
 
 /** A picture or video the card's test case is about. `scene` picks the illustration to render. */
@@ -262,10 +260,14 @@ export interface TeachCard {
   id: string;
   category: string;
   question: string;
-  /** The card's example slots; their `hint`s guide what the kid types while training Pip. */
+  /** The classic blind-spot examples; their count is how many the kid types while training. */
   examples: TeachExample[];
   /** What Pip asks for in the training step. */
   trainPrompt: string;
+  /** Label for the training text box. */
+  trainHelp: string;
+  /** The two verdicts the kid can give each example, e.g. ["real", "fake"]. */
+  labels: [string, string];
   /** Required whenever the question is about a picture or video. */
   media?: TeachMedia;
   /** What Pip sees or hears that trips it up. */
@@ -276,15 +278,38 @@ export interface TeachCard {
   /** Pip's reaction to the same test case once the blind spot is fixed. */
   pipFixed: string;
   explanation: string;
+  /**
+   * If one of the kid's own training examples has this verdict and mentions one of these
+   * keywords, the kid already covered the blind spot and Pip passes its test.
+   */
+  fixVerdict: string;
+  fixKeywords: string[];
 }
 
 /** What the browser sees before answering: no `kind`, so no answer key. */
-export interface PublicTeachCard extends Omit<TeachCard, 'choices' | 'pipFixed' | 'explanation'> {
+export interface PublicTeachCard extends Omit<
+  TeachCard,
+  'choices' | 'pipFixed' | 'explanation' | 'fixVerdict' | 'fixKeywords'
+> {
   choices: { letter: TeachChoiceLetter; example: TeachExample }[];
 }
 
 export interface TeachResponse {
   cards: PublicTeachCard[];
+}
+
+export interface TeachTrainRequest {
+  examples: TeachExample[];
+}
+
+export interface TeachTrainResult {
+  cardId: string;
+  /** The kid's example that already covers the blind spot, if any (then Pip passes). */
+  coveredBy: TeachExample | null;
+  pipSays: string;
+  /** Only sent when the kid's examples already covered the blind spot. */
+  explanation?: string;
+  xpEarned: number;
 }
 
 export interface TeachAnswerRequest {

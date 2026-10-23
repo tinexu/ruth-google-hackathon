@@ -7,7 +7,10 @@ import type {
   TeachAnswerRequest,
   TeachAnswerResult,
   TeachChoiceLetter,
+  TeachExample,
   TeachResponse,
+  TeachTrainRequest,
+  TeachTrainResult,
 } from '@shared/types';
 
 export async function fetchHomeData(): Promise<HomeData> {
@@ -61,5 +64,16 @@ export function answerTeachCard(
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ letter } satisfies TeachAnswerRequest),
+  });
+}
+
+export function trainTeachCard(
+  cardId: string,
+  examples: TeachExample[],
+): Promise<TeachTrainResult> {
+  return requestJson<TeachTrainResult>(`/api/teach/${encodeURIComponent(cardId)}/train`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ examples } satisfies TeachTrainRequest),
   });
 }

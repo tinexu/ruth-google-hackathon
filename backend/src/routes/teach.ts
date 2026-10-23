@@ -5,13 +5,29 @@ import type {
   TeachAnswerRequest,
   TeachAnswerResult,
   TeachCard,
+  TeachExample,
   TeachResponse,
+  TeachTrainRequest,
+  TeachTrainResult,
 } from '../../../shared/types.js';
 import { loadTeachCards } from '../data.js';
+import { hasPhrase, normalize } from '../grading/match.js';
 
 export const teachRouter = Router();
 
 const XP_PER_FIX = 20;
+const MAX_EXAMPLE_LENGTH = 40;
+
+/** The kid's example that already teaches Pip the fix, if any. */
+function findCoveringExample(card: TeachCard, examples: TeachExample[]): TeachExample | null {
+  return (
+    examples.find(
+      (ex) =>
+        ex.verdict === card.fixVerdict &&
+        card.fixKeywords.some((k) => hasPhrase(normalize(ex.label), k)),
+    ) ?? null
+  );
+}
 
 /** Drop each choice's `kind` and the post-answer copy so the answer stays a secret. */
 function toPublicCard(card: TeachCard): PublicTeachCard {
@@ -21,6 +37,8 @@ function toPublicCard(card: TeachCard): PublicTeachCard {
     question: card.question,
     examples: card.examples,
     trainPrompt: card.trainPrompt,
+    trainHelp: card.trainHelp,
+    labels: card.labels,
     media: card.media,
     testCase: card.testCase,
     pipMistake: card.pipMistake,
@@ -37,6 +55,48 @@ teachRouter.get('/teach', (_req, res) => {
   } catch (err) {
     console.error('Failed to load Teach cards:', err);
     res.status(500).json({ error: 'Could not load Teach Pip cards.' } satisfies ApiError);
+  }
+});
+
+// POST /api/teach/:id/train { examples } -> TeachTrainResult
+// Pip "learns" the kid's typed examples, then takes its test case.
+teachRouter.post('/teach/:id/train', (req, res) => {
+  const { examples } = (req.body ?? {}) as Partial<TeachTrainRequest>;
+  try {
+    const card = loadTeachCards().find((c) => c.id === req.params.id);
+    if (!card) {
+      res.status(404).json({ error: 'That card does not exist.' } satisfies ApiError);
+      return;
+    }
+    const valid =
+      Array.isArray(examples) &&
+      examples.length === card.examples.length &&
+      examples.every(
+        (ex) =>
+          typeof ex?.label === 'string' &&
+          ex.label.trim().length > 0 &&
+          ex.label.length <= MAX_EXAMPLE_LENGTH &&
+          card.labels.includes(ex.verdict),
+      );
+    if (!valid) {
+      res
+        .status(400)
+        .json({ error: `Give Pip ${card.examples.length} labeled examples.` } satisfies ApiError);
+      return;
+    }
+
+    const coveredBy = findCoveringExample(card, examples);
+    const result: TeachTrainResult = {
+      cardId: card.id,
+      coveredBy,
+      pipSays: coveredBy ? card.pipFixed : card.pipMistake,
+      explanation: coveredBy ? card.explanation : undefined,
+      xpEarned: coveredBy ? XP_PER_FIX : 0,
+    };
+    res.json(result);
+  } catch (err) {
+    console.error('Failed to train Pip:', err);
+    res.status(500).json({ error: 'Pip could not learn those examples.' } satisfies ApiError);
   }
 });
 
