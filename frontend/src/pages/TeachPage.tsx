@@ -47,24 +47,24 @@ export function TeachPage() {
     <main className="mx-auto flex max-w-[1200px] flex-col gap-7 px-6 py-10 text-ink">
       <div className="flex flex-col gap-1">
         <h1 className="font-heading text-[40px] font-extrabold leading-tight text-ink">
-          Train Pip
+          Train Ada
         </h1>
         <p className="text-lg text-muted">
-          Pip only knows what your examples show it. Find the blind spot and fix it.
+          Ada only knows what your examples show it. Find the blind spot and fix it.
         </p>
       </div>
 
       {state.status === 'loading' && (
         <div className="flex flex-col items-center gap-4 py-16">
           <PipMascot mood="happy" size={100} waving={false} className="animate-pip-bounce" />
-          <p className="font-heading text-lg font-bold text-ink">Pip is getting its notes out…</p>
+          <p className="font-heading text-lg font-bold text-ink">Ada is getting its notes out…</p>
         </div>
       )}
       {state.status === 'error' && (
         <div className="flex flex-col items-center gap-4 py-16 text-center">
           <PipMascot mood="worried" size={120} waving={false} />
           <h2 className="font-heading text-2xl font-extrabold text-ink">
-            Pip couldn't load its lessons
+            Ada couldn't load its lessons
           </h2>
           <p className="max-w-sm text-muted">
             Make sure the server is running, then refresh this page.
@@ -118,7 +118,7 @@ function TeachSession({
   function showError(e: unknown) {
     setError(
       e instanceof ServerUnavailableError
-        ? "Pip can't reach the server right now. Is it running?"
+        ? "Ada can't reach the server right now. Is it running?"
         : e instanceof Error
           ? e.message
           : 'Something went wrong.',

@@ -19,7 +19,7 @@ export function PipProgress({ pet, xp, mood, celebrating }: PipProgressProps) {
 
   return (
     <section
-      aria-label="Pip's progress"
+      aria-label="Ada's progress"
       className="flex w-full flex-col items-center gap-5 lg:max-w-[340px] lg:pt-3"
     >
       <div className="flex size-[220px] items-center justify-center rounded-full border-[2.5px] border-ink bg-sun sm:size-[260px]">
@@ -55,7 +55,7 @@ export function PipProgress({ pet, xp, mood, celebrating }: PipProgressProps) {
       </div>
 
       <p className="w-full border-t-2 border-border pt-3.5 text-[15px] leading-relaxed text-muted">
-        Every card you fix gives Pip <b className="text-ink">+20 XP</b> and makes its training data
+        Every card you fix gives Ada <b className="text-ink">+20 XP</b> and makes its training data
         a little fairer.
       </p>
     </section>

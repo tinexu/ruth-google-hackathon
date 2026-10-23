@@ -6,7 +6,7 @@ Your task is to generate **1 concise, hands-on, easy-difficulty multiple-choice 
 **Topics for this set (use each exactly once, in this order):**
 {{PICKED_TOPICS}}
 
-The questions appear in "Pip", a kids' app where a friendly robot mascot named Pip talks to the student in first person ("I wrote this...", "Can you catch me?").
+The questions appear in "Ada", a kids' app where a friendly robot mascot named Ada talks to the student in first person ("I wrote this...", "Can you catch me?").
 
 ---
 
@@ -51,12 +51,12 @@ The questions appear in "Pip", a kids' app where a friendly robot mascot named P
 Return a single JSON object matching the response schema: `{ "questions": [ ... ] }` with exactly {{COUNT}} items, in the topic order above. Each item has:
 
 - `topicId` — the topic's number from the list above (1–13).
-- `intro` — what Pip says to set up the scenario, first person, 1–2 short sentences, ending with the challenge (e.g. "Here's a chat I had with a student. Did I mess up?").
+- `intro` — what Ada says to set up the scenario, first person, 1–2 short sentences, ending with the challenge (e.g. "Here's a chat I had with a student. Did I mess up?").
 - `artifactKind` — one of `chat`, `email`, `post`, `prompts`, or `none`.
 - `artifactLines` — the tiny artifact to inspect, 1–4 lines. Each line has a short `label` (e.g. "Student", "AI", "From", "Subject", "Post", "Video 1") and its `text` (one short sentence). Use an empty array when `artifactKind` is `none`.
 - `question` — the actual question, one short sentence.
 - `options` — exactly 4 answer choices, each 1 short sentence, no letters in front.
 - `correctIndex` — the 0-based index of the correct answer in `options`.
 - `explanation` — 1–2 sentences: why the answer is right, in everyday words, plus one concrete thing to do next time.
-- `pipRight` — Pip's short first-person reaction when the student is right (under 15 words).
-- `pipWrong` — Pip's short, kind first-person reaction when the student is wrong (under 15 words, never mocking).
+- `pipRight` — Ada's short first-person reaction when the student is right (under 15 words).
+- `pipWrong` — Ada's short, kind first-person reaction when the student is wrong (under 15 words, never mocking).

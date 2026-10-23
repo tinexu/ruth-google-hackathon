@@ -210,5 +210,5 @@ feedRouter.post('/feed/questions', async (req, res) => {
       console.warn(`[feed] attempt ${attempt} failed:`, lastError.message);
     }
   }
-  res.status(502).json({ error: 'Pip could not make new questions right now.', detail: lastError?.message });
+  res.status(502).json({ error: 'Ada could not make new questions right now.', detail: lastError?.message });
 });

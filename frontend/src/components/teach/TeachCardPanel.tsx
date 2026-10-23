@@ -80,11 +80,11 @@ function ExampleInput({
       return;
     }
     if (given.some((g) => g.label.toLowerCase() === label.toLowerCase())) {
-      setProblem('You already gave Pip that one. Try a different example.');
+      setProblem('You already gave Ada that one. Try a different example.');
       return;
     }
     if (!verdict) {
-      setProblem(`Tell Pip what it means: ${labelA} or ${labelB}?`);
+      setProblem(`Tell Ada what it means: ${labelA} or ${labelB}?`);
       return;
     }
     onGive({ label, verdict });
@@ -227,7 +227,7 @@ export function TeachCardPanel({
 
       <div className="flex flex-col gap-2.5">
         <div className="flex items-baseline justify-between gap-3">
-          <span className="text-sm font-bold text-muted">Examples you gave Pip</span>
+          <span className="text-sm font-bold text-muted">Examples you gave Ada</span>
           {!trained && (
             <span className="text-sm font-bold text-muted tabular-nums">
               {given.length} of {needed}
@@ -279,10 +279,10 @@ export function TeachCardPanel({
             <PipMascot mood="happy" size={64} waving={false} className="shrink-0" />
             <div className="flex min-w-0 flex-col gap-1">
               <span className="font-heading text-[22px] font-extrabold leading-tight">
-                Pip: "{card.trainPrompt}"
+                Ada: "{card.trainPrompt}"
               </span>
               <span className="text-[15px] leading-snug text-muted">
-                Give Pip {needed} examples. Then we'll test what it learned.
+                Give Ada {needed} examples. Then we'll test what it learned.
               </span>
             </div>
           </div>
@@ -314,7 +314,7 @@ export function TeachCardPanel({
               disabled={!readyToTrain || checking}
               className="py-4 disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {checking ? 'Pip is learning…' : 'Train Pip'}
+              {checking ? 'Ada is learning…' : 'Train Ada'}
             </Button>
           </div>
         </>
@@ -338,7 +338,7 @@ export function TeachCardPanel({
                   solved ? 'text-ink' : 'text-coral-ink'
                 }`}
               >
-                Pip: "{pipLine}"
+                Ada: "{pipLine}"
               </span>
             </div>
           </div>
@@ -347,7 +347,7 @@ export function TeachCardPanel({
             <>
               <div className="pop-in flex flex-col gap-1.5">
                 <h3 className="font-heading text-[26px] font-extrabold leading-tight">
-                  {coveredBy ? 'Your examples already covered it' : "You fixed Pip's blind spot"}{' '}
+                  {coveredBy ? 'Your examples already covered it' : "You fixed Ada's blind spot"}{' '}
                   <span className="text-lg text-[#1F8A52]">
                     +{coveredBy ? trainResult?.xpEarned : fixedByChoice?.xpEarned} XP
                   </span>
@@ -358,7 +358,7 @@ export function TeachCardPanel({
               </div>
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <span className="text-[15px] text-muted">
-                  {coveredBy ? 'Pip learned it from ' : 'You picked '}
+                  {coveredBy ? 'Ada learned it from ' : 'You picked '}
                   <b className="text-ink">
                     {coveredBy
                       ? `${coveredBy.label} → ${coveredBy.verdict}`
@@ -366,7 +366,7 @@ export function TeachCardPanel({
                   </b>
                 </span>
                 <Button type="button" variant="sun" onClick={onNext} className="py-4">
-                  {isLast ? 'See how Pip did' : 'Next card'}
+                  {isLast ? 'See how Ada did' : 'Next card'}
                   <ArrowRightIcon width={20} height={20} strokeWidth={2.6} />
                 </Button>
               </div>
@@ -424,7 +424,7 @@ export function TeachCardPanel({
                   className="pop-in flex items-start gap-2 rounded-2xl bg-coral-soft px-4 py-3 text-[15px] font-bold leading-snug text-coral-ink"
                 >
                   <CrossIcon width={18} height={18} strokeWidth={3} className="mt-0.5 shrink-0" />
-                  Pip: "{lastWrong.pipSays}" {lastWrong.feedback}
+                  Ada: "{lastWrong.pipSays}" {lastWrong.feedback}
                 </p>
               )}
               {errorMessage}
@@ -444,7 +444,7 @@ export function TeachCardPanel({
                   disabled={!picked || checking}
                   className="py-4 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {checking ? 'Pip is learning…' : "Add to Pip's examples"}
+                  {checking ? 'Ada is learning…' : "Add to Ada's examples"}
                 </Button>
               </div>
             </>

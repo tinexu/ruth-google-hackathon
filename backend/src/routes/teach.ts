@@ -54,7 +54,7 @@ teachRouter.get('/teach', (_req, res) => {
     res.json(body);
   } catch (err) {
     console.error('Failed to load Teach cards:', err);
-    res.status(500).json({ error: 'Could not load Teach Pip cards.' } satisfies ApiError);
+    res.status(500).json({ error: 'Could not load Teach Ada cards.' } satisfies ApiError);
   }
 });
 
@@ -81,7 +81,7 @@ teachRouter.post('/teach/:id/train', (req, res) => {
     if (!valid) {
       res
         .status(400)
-        .json({ error: `Give Pip ${card.examples.length} labeled examples.` } satisfies ApiError);
+        .json({ error: `Give Ada ${card.examples.length} labeled examples.` } satisfies ApiError);
       return;
     }
 
@@ -96,7 +96,7 @@ teachRouter.post('/teach/:id/train', (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Failed to train Pip:', err);
-    res.status(500).json({ error: 'Pip could not learn those examples.' } satisfies ApiError);
+    res.status(500).json({ error: 'Ada could not learn those examples.' } satisfies ApiError);
   }
 });
 
@@ -132,6 +132,6 @@ teachRouter.post('/teach/:id/answer', (req, res) => {
     res.json(result);
   } catch (err) {
     console.error('Failed to check Teach answer:', err);
-    res.status(500).json({ error: 'Pip could not check that answer.' } satisfies ApiError);
+    res.status(500).json({ error: 'Ada could not check that answer.' } satisfies ApiError);
   }
 });

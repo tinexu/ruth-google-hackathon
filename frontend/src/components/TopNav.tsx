@@ -15,7 +15,7 @@ const TABS = [
   { to: '/feed', label: 'Feed', icon: FeedIcon },
   { to: '/train', label: 'Train', icon: DumbbellIcon },
   { to: '/battle', label: 'Battle', icon: ZapIcon },
-  { to: '/', label: 'My Pip', icon: PawIcon, end: true },
+  { to: '/', label: 'My Ada', icon: PawIcon, end: true },
   { to: '/community', label: 'Community', icon: UsersIcon },
   { to: '/settings', label: 'Settings', icon: SettingsIcon },
 ];
@@ -31,7 +31,7 @@ export function TopNav({ streakDays, xp }: TopNavProps) {
       <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-4 px-6 py-3">
         <div className="flex items-center gap-2">
           <PipMascot size={30} waving={false} className="shrink-0" />
-          <span className="font-heading text-xl font-extrabold text-white">Pip</span>
+          <span className="font-heading text-xl font-extrabold text-white">Ada</span>
         </div>
 
         <nav className="flex items-center gap-1" aria-label="Main">

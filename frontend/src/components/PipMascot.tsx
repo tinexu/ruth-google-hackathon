@@ -24,7 +24,7 @@ export function PipMascot({
       height={(size * 260) / 240}
       className={className}
       role="img"
-      aria-label={`Pip the robot, feeling ${mood}`}
+      aria-label={`Ada the robot, feeling ${mood}`}
     >
       {/* floor shadow */}
       <ellipse cx="120" cy="240" rx="62" ry="10" className="fill-ink/15" />

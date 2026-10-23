@@ -57,7 +57,7 @@ export function CommunityPage() {
       <main className="mx-auto flex max-w-[1360px] flex-col items-center gap-4 px-6 py-24 text-center">
         <PipMascot mood="worried" size={120} waving={false} />
         <h1 className="font-heading text-2xl font-extrabold text-ink">
-          Pip couldn't load the class
+          Ada couldn't load the class
         </h1>
         <p className="max-w-sm text-muted">{state.message}</p>
       </main>

@@ -10,7 +10,7 @@ homeRouter.get('/home', (_req, res) => {
     res.json(data);
   } catch (err) {
     console.error('Failed to load home data:', err);
-    res.status(500).json({ error: 'Could not load Pip data.' });
+    res.status(500).json({ error: 'Could not load Ada data.' });
   }
 });
 

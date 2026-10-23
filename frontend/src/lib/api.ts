@@ -30,11 +30,11 @@ async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
   try {
     res = await fetch(path, init);
   } catch {
-    throw new ServerUnavailableError('Could not reach the Pip server.');
+    throw new ServerUnavailableError('Could not reach the Ada server.');
   }
   const isJson = res.headers.get('content-type')?.includes('application/json');
   if (!isJson || res.status === 502 || res.status === 504) {
-    throw new ServerUnavailableError('The Pip server is not running.');
+    throw new ServerUnavailableError('The Ada server is not running.');
   }
   const body = (await res.json()) as T | ApiError;
   if (!res.ok) throw new Error((body as ApiError).error ?? `Server responded with ${res.status}`);

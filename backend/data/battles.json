@@ -9,7 +9,7 @@
       "mode": "picture-twin",
       "round": 1,
       "title": "Picture Twin",
-      "blurb": "Write the prompt that makes Pip draw this exact picture.",
+      "blurb": "Write the prompt that makes Ada draw this exact picture.",
       "pipIntro": "I'm hiding a secret picture. Describe it so well that I draw its twin!",
       "targetPrompt": "A chubby hamster wearing a tall white chef's hat, flipping a pancake with a spatula, in a school cafeteria, with a chalkboard behind it that says \"Pizza Friday\", in retro pixel-art video game style.",
       "elements": [

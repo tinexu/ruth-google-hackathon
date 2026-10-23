@@ -22,10 +22,10 @@ export function HomePage() {
     <main className="mx-auto max-w-[1360px] px-6 py-10">
       {/* greeting */}
       <h1 className="font-heading text-[40px] font-extrabold leading-tight text-ink">
-        Hi {kid.name}, Pip missed you!
+        Hi {kid.name}, Ada missed you!
       </h1>
       <p className="mt-1 text-lg text-muted">
-        Pip is feeling {pet.mood} today. Teach it something new?
+        Ada is feeling {pet.mood} today. Teach it something new?
       </p>
 
       {/* two column row */}
@@ -60,7 +60,7 @@ export function HomePage() {
               icon={<FeedIcon width={18} height={18} className="stroke-ink" />}
               onClick={() => navigate('/feed')}
             >
-              Feed Pip a lesson
+              Feed Ada a lesson
             </Button>
             <Button
               variant="coral"
@@ -74,7 +74,7 @@ export function HomePage() {
               icon={<UsersIcon width={18} height={18} className="stroke-ink" />}
               onClick={() => navigate('/community')}
             >
-              Take Pip to play
+              Take Ada to play
             </Button>
           </div>
         </Card>
@@ -84,7 +84,7 @@ export function HomePage() {
           <div>
             <p className="text-xs font-bold tracking-wide text-muted">HEALTH REPORT CARD</p>
             <h2 className="mt-1 font-heading text-2xl font-extrabold text-ink">
-              How Pip is doing
+              How Ada is doing
             </h2>
           </div>
 
@@ -106,9 +106,9 @@ export function HomePage() {
       <section className="mt-12">
         <div className="flex flex-wrap items-end justify-between gap-2">
           <div>
-            <h2 className="font-heading text-2xl font-extrabold text-ink">What Pip knows</h2>
+            <h2 className="font-heading text-2xl font-extrabold text-ink">What Ada knows</h2>
             <p className="mt-1 text-muted">
-              Every skill Pip learns can be used when it plays in Community.
+              Every skill Ada learns can be used when it plays in Community.
             </p>
           </div>
           <p className="font-heading text-sm font-bold text-ink">
