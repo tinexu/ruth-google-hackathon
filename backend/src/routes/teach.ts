@@ -20,6 +20,8 @@ function toPublicCard(card: TeachCard): PublicTeachCard {
     category: card.category,
     question: card.question,
     examples: card.examples,
+    trainPrompt: card.trainPrompt,
+    media: card.media,
     testCase: card.testCase,
     pipMistake: card.pipMistake,
     uhOh: card.uhOh,

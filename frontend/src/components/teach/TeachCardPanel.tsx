@@ -4,9 +4,13 @@ import type {
   TeachChoiceLetter,
   TeachExample,
 } from '@shared/types';
+import { useState } from 'react';
 import { Button } from '../Button';
 import { PipMascot } from '../PipMascot';
 import { ArrowRightIcon, PlusIcon, CrossIcon } from '../icons';
+import { TeachMediaView } from './TeachMediaView';
+
+const MAX_EXAMPLE_LENGTH = 40;
 
 interface TeachCardPanelProps {
   card: PublicTeachCard;
@@ -16,7 +20,7 @@ interface TeachCardPanelProps {
   /** Letters already tried and found wrong on this card. */
   wrong: TeachChoiceLetter[];
   result: TeachAnswerResult | null;
-  /** Labels of the examples the kid has given Pip so far, in order. */
+  /** The examples the kid has typed for Pip so far, in slot order. */
   given: string[];
   /** True once the kid pressed "Train Pip" and Pip took its test. */
   trained: boolean;
@@ -48,10 +52,83 @@ function ExampleTile({ example, isNew }: { example: TeachExample; isNew?: boolea
   );
 }
 
+/** Text box for typing the next training example; the slot's hint keeps it on the blind spot. */
+function ExampleInput({
+  slotNumber,
+  slot,
+  given,
+  onGive,
+}: {
+  slotNumber: number;
+  slot: TeachExample;
+  given: string[];
+  onGive: (label: string) => void;
+}) {
+  const [text, setText] = useState('');
+  const [problem, setProblem] = useState<string | null>(null);
+  const inputId = `teach-example-${slotNumber}`;
+
+  function add() {
+    const label = text.trim().replace(/\s+/g, ' ');
+    if (label.length < 2) {
+      setProblem('Type an example first.');
+      return;
+    }
+    if (given.some((g) => g.toLowerCase() === label.toLowerCase())) {
+      setProblem('You already gave Pip that one. Try a different example.');
+      return;
+    }
+    onGive(label);
+  }
+
+  return (
+    <form
+      className="flex flex-col gap-2"
+      onSubmit={(e) => {
+        e.preventDefault();
+        add();
+      }}
+    >
+      <label htmlFor={inputId} className="font-heading text-lg font-extrabold">
+        Example {slotNumber}: {slot.hint}
+      </label>
+      <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+        <div className="flex min-w-0 flex-1 items-center gap-2 rounded-[18px] border-[2.5px] border-ink bg-white pr-3 focus-within:outline focus-within:outline-3 focus-within:outline-offset-2 focus-within:outline-pip-blue">
+          <input
+            id={inputId}
+            type="text"
+            autoComplete="off"
+            autoFocus={slotNumber > 1}
+            maxLength={MAX_EXAMPLE_LENGTH}
+            value={text}
+            placeholder={`e.g. ${slot.label}`}
+            aria-describedby={problem ? `${inputId}-problem` : undefined}
+            onChange={(e) => {
+              setText(e.target.value);
+              setProblem(null);
+            }}
+            className="min-w-0 flex-1 rounded-[16px] bg-transparent px-4 py-3.5 text-[17px] text-ink outline-none placeholder:text-muted/70"
+          />
+          <span className="shrink-0 text-sm font-bold text-muted">→ {slot.verdict}</span>
+        </div>
+        <Button type="submit" variant="white" className="py-3.5">
+          <PlusIcon width={18} height={18} strokeWidth={2.4} />
+          Add
+        </Button>
+      </div>
+      {problem && (
+        <p id={`${inputId}-problem`} role="alert" className="text-sm font-bold text-coral-ink">
+          {problem}
+        </p>
+      )}
+    </form>
+  );
+}
+
 /**
- * Right column of the Teach page. Each card has two steps: the kid trains Pip with
- * the card's examples (which hide a blind spot), then Pip fails a test and the kid
- * picks the example that fixes it.
+ * Right column of the Teach page. Each card has two steps: the kid types examples
+ * to train Pip (the hints steer them into a blind spot), then Pip fails a test and
+ * the kid picks the example that fixes it.
  */
 export function TeachCardPanel({
   card,
@@ -99,6 +176,8 @@ export function TeachCardPanel({
         {card.question}
       </h2>
 
+      {card.media && <TeachMediaView media={card.media} />}
+
       <div className="flex flex-col gap-2.5">
         <div className="flex items-baseline justify-between gap-3">
           <span className="text-sm font-bold text-muted">Examples you gave Pip</span>
@@ -109,21 +188,23 @@ export function TeachCardPanel({
           )}
         </div>
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4">
-          {trained
-            ? card.examples.map((ex) => <ExampleTile key={ex.label} example={ex} />)
-            : card.examples.map((_, i) => {
-                const ex = card.examples.find((e) => e.label === given[i]);
-                return ex ? (
-                  <ExampleTile key={ex.label} example={ex} />
-                ) : (
-                  <div
-                    key={`slot-${i}`}
-                    className="flex min-h-[76px] items-center justify-center rounded-2xl border-2 border-dashed border-nav-muted font-heading text-xl font-extrabold text-muted"
-                  >
-                    {i + 1}
-                  </div>
-                );
-              })}
+          {card.examples.map((slot, i) =>
+            given[i] ? (
+              <ExampleTile
+                key={`given-${i}`}
+                example={{ label: given[i], verdict: slot.verdict }}
+              />
+            ) : trained ? (
+              <ExampleTile key={slot.label} example={slot} />
+            ) : (
+              <div
+                key={`slot-${i}`}
+                className="flex min-h-[76px] items-center justify-center rounded-2xl border-2 border-dashed border-nav-muted font-heading text-xl font-extrabold text-muted"
+              >
+                {i + 1}
+              </div>
+            ),
+          )}
           {!trained ? (
             <div className="flex min-h-[76px] flex-col items-center justify-center gap-0.5 rounded-2xl border-2 border-dashed border-border px-2 py-2 text-center text-[13px] font-bold text-muted">
               <PlusIcon width={18} height={18} strokeWidth={2.4} />
@@ -152,42 +233,23 @@ export function TeachCardPanel({
             <PipMascot mood="happy" size={64} waving={false} className="shrink-0" />
             <div className="flex min-w-0 flex-col gap-1">
               <span className="font-heading text-[22px] font-extrabold leading-tight">
-                Pip: "I don't know anything yet! Teach me."
+                Pip: "{card.trainPrompt}"
               </span>
               <span className="text-[15px] leading-snug text-muted">
-                Give Pip {needed} examples. Then we'll test what it learned.
+                Type {needed} examples for Pip. Then we'll test what it learned.
               </span>
             </div>
           </div>
 
-          <div className="flex flex-col gap-2.5">
-            <span className="text-sm font-bold text-muted">Tap to give Pip an example</span>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              {card.examples.map((ex) => {
-                const used = given.includes(ex.label);
-                return (
-                  <button
-                    key={ex.label}
-                    type="button"
-                    disabled={used}
-                    onClick={() => onGive(ex.label)}
-                    className={`focus-ring flex min-h-[72px] flex-col gap-1 rounded-2xl border-[2.5px] px-3.5 py-3 text-left transition-transform ${
-                      used
-                        ? 'cursor-default border-dashed border-nav-muted bg-ground opacity-60'
-                        : 'border-ink bg-white shadow-[0_4px_0_#1B2140] hover:-translate-y-0.5'
-                    }`}
-                  >
-                    <span className="font-heading text-lg font-extrabold leading-tight">
-                      {ex.label}
-                    </span>
-                    <span className="text-[13px] font-bold text-muted">
-                      {used ? 'added' : ex.verdict}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+          {!readyToTrain && (
+            <ExampleInput
+              key={given.length}
+              slotNumber={given.length + 1}
+              slot={card.examples[given.length]}
+              given={given}
+              onGive={onGive}
+            />
+          )}
 
           <div className="flex flex-wrap items-center justify-between gap-3">
             <button

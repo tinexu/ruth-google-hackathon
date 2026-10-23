@@ -238,6 +238,16 @@ export type TeachChoiceLetter = 'A' | 'B' | 'C' | 'D';
 export interface TeachExample {
   label: string;
   verdict: string;
+  /** Training step only: what kind of example the kid should type, e.g. "a silly face filter". */
+  hint?: string;
+}
+
+/** A picture or video the card's test case is about. `scene` picks the illustration to render. */
+export interface TeachMedia {
+  kind: 'video' | 'image';
+  scene: 'deepfake-singer';
+  /** Describes the media for screen readers. */
+  alt: string;
 }
 
 export interface TeachChoice {
@@ -252,7 +262,12 @@ export interface TeachCard {
   id: string;
   category: string;
   question: string;
+  /** The card's example slots; their `hint`s guide what the kid types while training Pip. */
   examples: TeachExample[];
+  /** What Pip asks for in the training step. */
+  trainPrompt: string;
+  /** Required whenever the question is about a picture or video. */
+  media?: TeachMedia;
   /** What Pip sees or hears that trips it up. */
   testCase: string;
   pipMistake: string;
