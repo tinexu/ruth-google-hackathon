@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import type { PublicTeachCard, TeachAnswerResult, TeachChoiceLetter } from '@shared/types';
-import { ServerUnavailableError, answerTeachCard, fetchTeachCards } from '../lib/api';
+import type {
+  PublicTeachCard,
+  TeachAnswerResult,
+  TeachChoiceLetter,
+  TeachExample,
+  TeachTrainResult,
+} from '@shared/types';
+import {
+  ServerUnavailableError,
+  answerTeachCard,
+  fetchTeachCards,
+  trainTeachCard,
+} from '../lib/api';
 import type { AppOutletContext } from '../lib/outlet';
 import { Button } from '../components/Button';
 import { PipMascot } from '../components/PipMascot';
@@ -83,8 +94,8 @@ function TeachSession({
   const [picked, setPicked] = useState<TeachChoiceLetter | null>(null);
   const [wrong, setWrong] = useState<TeachChoiceLetter[]>([]);
   const [result, setResult] = useState<TeachAnswerResult | null>(null);
-  const [given, setGiven] = useState<string[]>([]);
-  const [trained, setTrained] = useState(false);
+  const [given, setGiven] = useState<TeachExample[]>([]);
+  const [trainResult, setTrainResult] = useState<TeachTrainResult | null>(null);
   const [checking, setChecking] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [fixed, setFixed] = useState<string[]>([]);
@@ -93,7 +104,40 @@ function TeachSession({
 
   const done = index >= cards.length;
   const card = cards[Math.min(index, cards.length - 1)];
-  const solved = result?.correct === true;
+  const trained = trainResult !== null;
+  const solved = result?.correct === true || Boolean(trainResult?.coveredBy);
+
+  function markFixed(xpEarned: number) {
+    setFixed((f) => (f.includes(card.id) ? f : [...f, card.id]));
+    if (!awarded.current.has(card.id)) {
+      awarded.current.add(card.id);
+      onXpEarned(xpEarned);
+    }
+  }
+
+  function showError(e: unknown) {
+    setError(
+      e instanceof ServerUnavailableError
+        ? "Pip can't reach the server right now. Is it running?"
+        : e instanceof Error
+          ? e.message
+          : 'Something went wrong.',
+    );
+  }
+
+  async function train() {
+    setChecking(true);
+    setError(null);
+    try {
+      const r = await trainTeachCard(card.id, given);
+      setTrainResult(r);
+      if (r.coveredBy) markFixed(r.xpEarned);
+    } catch (e) {
+      showError(e);
+    } finally {
+      setChecking(false);
+    }
+  }
 
   function goTo(next: number) {
     setIndex(next);
@@ -102,7 +146,7 @@ function TeachSession({
     setResult(null);
     setError(null);
     setGiven([]);
-    setTrained(false);
+    setTrainResult(null);
   }
 
   async function submit() {
@@ -113,23 +157,13 @@ function TeachSession({
       const r = await answerTeachCard(card.id, picked);
       setResult(r);
       if (r.correct) {
-        setFixed((f) => (f.includes(card.id) ? f : [...f, card.id]));
-        if (!awarded.current.has(card.id)) {
-          awarded.current.add(card.id);
-          onXpEarned(r.xpEarned);
-        }
+        markFixed(r.xpEarned);
       } else {
         setWrong((w) => [...w, picked]);
         setPicked(null);
       }
     } catch (e) {
-      setError(
-        e instanceof ServerUnavailableError
-          ? "Pip can't reach the server right now. Is it running?"
-          : e instanceof Error
-            ? e.message
-            : 'Something went wrong.',
-      );
+      showError(e);
     } finally {
       setChecking(false);
     }
@@ -153,8 +187,8 @@ function TeachSession({
             You fixed {fixed.length} of {cards.length} blind spots
           </h2>
           <p className="text-[17px] leading-relaxed">
-            AI only knows what it's trained on. Every card you added gave Pip a missing example, and
-            that's how real AI gets fairer and safer too.
+            AI only knows what it's trained on. Every blind spot you found was a missing example,
+            and adding it is how real AI gets fairer and safer too.
           </p>
           <ul className="flex flex-col gap-2">
             {cards.map((c) => {
@@ -185,10 +219,10 @@ function TeachSession({
           wrong={wrong}
           result={result}
           given={given}
-          trained={trained}
-          onGive={(label) => setGiven((g) => [...g, label])}
+          trainResult={trainResult}
+          onGive={(example) => setGiven((g) => [...g, example])}
           onResetExamples={() => setGiven([])}
-          onTrain={() => setTrained(true)}
+          onTrain={train}
           checking={checking}
           error={error}
           onPick={(letter) => {
