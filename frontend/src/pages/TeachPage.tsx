@@ -44,7 +44,7 @@ export function TeachPage() {
   }, []);
 
   return (
-    <main className="mx-auto flex max-w-[1200px] flex-col gap-7 px-6 py-10">
+    <main className="mx-auto flex max-w-[1200px] flex-col gap-7 px-6 py-10 text-ink">
       <div className="flex flex-col gap-1">
         <h1 className="font-heading text-[40px] font-extrabold leading-tight text-ink">
           Teach Pip
