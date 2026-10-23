@@ -1,10 +1,11 @@
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import type { HomeData } from '../../shared/types.js';
+import type { BattlesFile, HomeData } from '../../shared/types.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const demoPath = path.join(__dirname, '..', 'data', 'demo.json');
+const battlesPath = path.join(__dirname, '..', 'data', 'battles.json');
 
 /**
  * Loads the demo home-page data from disk on every call so edits to
@@ -14,4 +15,13 @@ const demoPath = path.join(__dirname, '..', 'data', 'demo.json');
 export function loadHomeData(): HomeData {
   const raw = readFileSync(demoPath, 'utf-8');
   return JSON.parse(raw) as HomeData;
+}
+
+/**
+ * Loads the Prompt Battle challenges, including their answer keys.
+ * Never send this straight to the browser; see toPublicChallenge in routes/battles.ts.
+ */
+export function loadBattles(): BattlesFile {
+  const raw = readFileSync(battlesPath, 'utf-8');
+  return JSON.parse(raw) as BattlesFile;
 }

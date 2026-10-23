@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import type { HomeData } from '@shared/types';
 import { fetchHomeData } from './lib/api';
@@ -7,12 +7,15 @@ import { PipMascot } from './components/PipMascot';
 import { HomePage } from './pages/HomePage';
 import { FeedPage } from './pages/FeedPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
+import { BattlePage } from './pages/BattlePage';
+import type { AppOutletContext } from './lib/outlet';
 
-function Layout({ data }: { data: HomeData }) {
+function Layout({ data, addXp }: { data: HomeData; addXp: (xp: number) => void }) {
+  const context: AppOutletContext = { ...data, addXp };
   return (
     <div className="min-h-screen bg-ground">
       <TopNav streakDays={data.kid.streakDays} xp={data.kid.xp} />
-      <Outlet context={data} />
+      <Outlet context={context} />
     </div>
   );
 }
@@ -64,15 +67,19 @@ export default function App() {
     };
   }, []);
 
+  const addXp = useCallback((xp: number) => {
+    setData((d) => (d ? { ...d, kid: { ...d.kid, xp: d.kid.xp + xp } } : d));
+  }, []);
+
   if (loading) return <LoadingState />;
   if (error || !data) return <ErrorState message={error ?? 'No data returned.'} />;
 
   return (
     <Routes>
-      <Route element={<Layout data={data} />}>
+      <Route element={<Layout data={data} addXp={addXp} />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/feed" element={<FeedPage />} />
-        <Route path="/battle" element={<PlaceholderPage title="Prompt Battle" file="src/pages/BattlePage.tsx" />} />
+        <Route path="/battle" element={<BattlePage />} />
         <Route path="/community" element={<PlaceholderPage title="Community" file="src/pages/CommunityPage.tsx" />} />
         <Route path="/me" element={<PlaceholderPage title="Me" file="src/pages/MePage.tsx" />} />
       </Route>

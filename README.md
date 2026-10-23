@@ -1,9 +1,10 @@
-# Pip — My Pip home page
+# Pip
 
 Pip is an AI-literacy website for kids ages 8–12. Each kid has a robot pet
-("Pip") that grows as they learn how AI works. This repo currently has the
-**"My Pip" home page** built out; Feed, Battle, Community, and Me are nav
-tabs that link to empty placeholder pages.
+("Pip") that grows as they learn how AI works. This repo has the
+**"My Pip" home page** and the **Prompt Battles** page (`/battle`) built
+out; Feed, Community, and Me are nav tabs that link to empty placeholder
+pages.
 
 ## Stack
 
@@ -21,6 +22,10 @@ backend/            Express API
   data/demo.json    demo kid/pet/stats/skills data
   src/index.ts       app entry
   src/routes/home.ts GET /api/home
+  data/battles.json  the 3 Prompt Battle challenges + answer keys
+  src/routes/battles.ts  GET /api/battles, POST /api/battles/:id/submit
+  src/grading/       rule-based mock grader (keyword checklists)
+  src/ai/gemini.ts   where Gemini plugs in to judge battles
 shared/types.ts      shared TS types for the API shape
 ```
 
@@ -68,6 +73,17 @@ Reusable building blocks live in `frontend/src/components/`: `TopNav`,
 entirely by the `/api/home` response — the "needs care" stat and the
 "X of Y skills unlocked" count are both computed from the data
 (`frontend/src/lib/derive.ts`), not hardcoded.
+
+## Prompt Battles
+
+`/battle` is three 30-second rounds against a simulated classmate (Maya):
+**Picture Twin** (describe a hidden pixel-art picture), **Literal Robot**
+(step-by-step instructions for a robot with no common sense), and **Secret
+Word Taboo** (make Pip say a word without the banned clues). The answer keys
+stay on the server; the browser only gets what `toPublicChallenge` in
+`backend/src/routes/battles.ts` lets through. Maya's scores come from the
+same grader run on her prompts. Grading is keyword-based for now; swap it
+for Gemini in `backend/src/grading/index.ts`.
 
 ## Branching
 
