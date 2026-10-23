@@ -16,16 +16,14 @@ export interface Pet {
   levelTitle: string;
   mood: PetMood;
   speech: string;
-  /** Overall health report card grade, e.g. "B+" */
-  grade: string;
-  /** Total XP needed to reach the next level (drives the Teach page progress bar). */
+  /** Total XP needed to reach the next level (drives the Train page progress bar). */
   nextLevelXp?: number;
 }
 
 export type StatColor = 'sun' | 'pip-blue' | 'coral' | 'mint';
 
 export interface Stat {
-  key: 'energy' | 'smarts' | 'fairness' | 'promptPower' | 'friendship';
+  key: 'energy' | 'brain' | 'muscle' | 'promptPower' | 'friendship';
   label: string;
   value: number; // 0-100
   color: StatColor;

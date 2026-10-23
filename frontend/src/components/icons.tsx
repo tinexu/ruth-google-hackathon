@@ -108,6 +108,23 @@ export const CrossIcon = (p: IconProps) => (
 export const ArrowRightIcon = (p: IconProps) => (
   <svg {...base({ strokeWidth: 2.6, ...p })}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
 );
+export const DumbbellIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M2 10v4" />
+    <path d="M5 8v8" />
+    <path d="M19 8v8" />
+    <path d="M22 10v4" />
+    <path d="M7 12h10" />
+    <rect x="4" y="9.5" width="3" height="5" rx="1" fill="currentColor" stroke="none" />
+    <rect x="17" y="9.5" width="3" height="5" rx="1" fill="currentColor" stroke="none" />
+  </svg>
+);
+export const SettingsIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <circle cx="12" cy="12" r="3" />
+    <path d="M12 2.5v3M12 18.5v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2.5 12h3M18.5 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" />
+  </svg>
+);
 export const ImageIcon = (p: IconProps) => (
   <svg {...base(p)}><rect x="3" y="5" width="18" height="14" rx="3" /><circle cx="9" cy="10" r="1.8" /><path d="M21 16l-5-5-8 8" /></svg>
 );

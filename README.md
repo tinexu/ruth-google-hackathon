@@ -2,9 +2,10 @@
 
 Pip is an AI-literacy website for kids ages 8–12. Each kid has a robot pet
 ("Pip") that grows as they learn how AI works. This repo has the
-**"My Pip" home page** and the **Prompt Battles** page (`/battle`) built
-out; Feed, Community, and Me are nav tabs that link to empty placeholder
-pages.
+**"My Pip" home page**, the **Feed** (`/feed`), **Train** (`/train`, where
+kids teach Pip with their own examples and fix its blind spots) and
+**Prompt Battles** (`/battle`) built out; Community and Settings are nav
+tabs that link to placeholder pages.
 
 ## Stack
 

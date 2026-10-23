@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
 import type { HomeData } from '@shared/types';
 import { fetchHomeData } from './lib/api';
 import { TopNav } from './components/TopNav';
@@ -80,10 +80,11 @@ export default function App() {
       <Route element={<Layout data={data} addXp={addXp} />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/feed" element={<FeedPage />} />
+        <Route path="/train" element={<TeachPage />} />
+        <Route path="/teach" element={<Navigate to="/train" replace />} />
         <Route path="/battle" element={<BattlePage />} />
-        <Route path="/teach" element={<TeachPage />} />
         <Route path="/community" element={<PlaceholderPage title="Community" file="src/pages/CommunityPage.tsx" />} />
-        <Route path="/me" element={<PlaceholderPage title="Me" file="src/pages/MePage.tsx" />} />
+        <Route path="/settings" element={<PlaceholderPage title="Settings" file="src/pages/SettingsPage.tsx" />} />
       </Route>
     </Routes>
   );

@@ -10,7 +10,6 @@
     "levelTitle": "Curious explorer",
     "mood": "curious",
     "speech": "I learned AI can make up facts! Can we practice catching them?",
-    "grade": "B+",
     "nextLevelXp": 500
   },
   "stats": [
@@ -22,18 +21,18 @@
       "note": "Stays full when you learn every day"
     },
     {
-      "key": "smarts",
-      "label": "Smarts",
+      "key": "brain",
+      "label": "Brain",
       "value": 72,
       "color": "pip-blue",
       "note": "Grows with feed cards you get right"
     },
     {
-      "key": "fairness",
-      "label": "Fairness",
+      "key": "muscle",
+      "label": "Muscle",
       "value": 31,
       "color": "coral",
-      "note": "Pip only learned from orange cats. Show it more kinds."
+      "note": "Grows when you keep training"
     },
     {
       "key": "promptPower",
