@@ -16,8 +16,6 @@ export interface Pet {
   levelTitle: string;
   mood: PetMood;
   speech: string;
-  /** Overall health report card grade, e.g. "B+" */
-  grade: string;
 }
 
 export type StatColor = 'sun' | 'pip-blue' | 'coral' | 'mint';

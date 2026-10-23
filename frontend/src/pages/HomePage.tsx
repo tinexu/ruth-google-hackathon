@@ -81,17 +81,11 @@ export function HomePage() {
 
         {/* health report card */}
         <Card border="solid" rounded="rounded-[28px]" className="flex flex-col bg-white p-7">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <p className="text-xs font-bold tracking-wide text-muted">HEALTH REPORT CARD</p>
-              <h2 className="mt-1 font-heading text-2xl font-extrabold text-ink">
-                How Pip is doing
-              </h2>
-            </div>
-            <div className="flex -rotate-6 flex-col items-center justify-center rounded-2xl border-[2.5px] border-ink bg-mint px-3 py-2 text-ink">
-              <span className="font-heading text-lg font-extrabold leading-none">{pet.grade}</span>
-              <span className="text-[10px] font-bold leading-none">overall</span>
-            </div>
+          <div>
+            <p className="text-xs font-bold tracking-wide text-muted">HEALTH REPORT CARD</p>
+            <h2 className="mt-1 font-heading text-2xl font-extrabold text-ink">
+              How Pip is doing
+            </h2>
           </div>
 
           <div className="mt-6 flex flex-col gap-4">
