@@ -6,6 +6,7 @@ import { TopNav } from './components/TopNav';
 import { PipMascot } from './components/PipMascot';
 import { HomePage } from './pages/HomePage';
 import { FeedPage } from './pages/FeedPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 import { BattlePage } from './pages/BattlePage';
 import { TeachPage } from './pages/TeachPage';
@@ -84,7 +85,7 @@ export default function App() {
         <Route path="/teach" element={<Navigate to="/train" replace />} />
         <Route path="/battle" element={<BattlePage />} />
         <Route path="/community" element={<PlaceholderPage title="Community" file="src/pages/CommunityPage.tsx" />} />
-        <Route path="/settings" element={<PlaceholderPage title="Settings" file="src/pages/SettingsPage.tsx" />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
     </Routes>
   );

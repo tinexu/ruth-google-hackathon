@@ -143,3 +143,18 @@ export const GradCapIcon = (p: IconProps) => (
 export const PlusIcon = (p: IconProps) => (
   <svg {...base(p)}><path d="M12 5v14M5 12h14" /></svg>
 );
+export const MailIcon = (p: IconProps) => (
+  <svg {...base(p)}><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m4 7 8 6 8-6" /></svg>
+);
+export const BellIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M6 10a6 6 0 0 1 12 0c0 4 1.5 5.5 2 6H4c.5-.5 2-2 2-6Z" />
+    <path d="M10 19a2 2 0 0 0 4 0" />
+  </svg>
+);
+export const SpeakerIcon = (p: IconProps) => (
+  <svg {...base(p)}>
+    <path d="M4 9v6h4l5 4V5L8 9H4Z" />
+    <path d="M16.5 9a4 4 0 0 1 0 6" />
+  </svg>
+);
