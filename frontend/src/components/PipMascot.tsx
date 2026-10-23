@@ -1,4 +1,4 @@
-export type PipMood = 'happy' | 'worried';
+export type PipMood = 'happy' | 'excited' | 'worried';
 
 interface PipMascotProps {
   mood?: PipMood;
@@ -150,7 +150,7 @@ export function PipMascot({
         strokeWidth="3"
       />
 
-      {mood === 'happy' ? (
+      {mood === 'happy' && (
         <>
           <circle cx="100" cy="90" r="8" className="fill-ink" />
           <circle cx="140" cy="90" r="8" className="fill-ink" />
@@ -164,7 +164,20 @@ export function PipMascot({
             strokeLinecap="round"
           />
         </>
-      ) : (
+      )}
+      {mood === 'excited' && (
+        <>
+          <circle cx="100" cy="88" r="9" className="fill-ink" />
+          <circle cx="140" cy="88" r="9" className="fill-ink" />
+          <ellipse cx="88" cy="110" rx="11" ry="7" className="fill-coral/60" />
+          <ellipse cx="152" cy="110" rx="11" ry="7" className="fill-coral/60" />
+          <path
+            d="M96 112 q24 22 48 0 q-4 14 -24 14 q-20 0 -24 -14 Z"
+            className="fill-ink"
+          />
+        </>
+      )}
+      {mood === 'worried' && (
         <>
           <path d="M92 80 l16 5" className="stroke-ink" strokeWidth="3" strokeLinecap="round" />
           <path d="M148 80 l-16 5" className="stroke-ink" strokeWidth="3" strokeLinecap="round" />

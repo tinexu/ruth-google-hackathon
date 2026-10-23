@@ -5,6 +5,7 @@ import { fetchHomeData } from './lib/api';
 import { TopNav } from './components/TopNav';
 import { PipMascot } from './components/PipMascot';
 import { HomePage } from './pages/HomePage';
+import { FeedPage } from './pages/FeedPage';
 import { PlaceholderPage } from './pages/PlaceholderPage';
 
 function Layout({ data }: { data: HomeData }) {
@@ -70,10 +71,10 @@ export default function App() {
     <Routes>
       <Route element={<Layout data={data} />}>
         <Route path="/" element={<HomePage />} />
-        <Route path="/feed" element={<PlaceholderPage title="Feed" />} />
-        <Route path="/battle" element={<PlaceholderPage title="Battle" />} />
-        <Route path="/community" element={<PlaceholderPage title="Community" />} />
-        <Route path="/me" element={<PlaceholderPage title="Me" />} />
+        <Route path="/feed" element={<FeedPage />} />
+        <Route path="/battle" element={<PlaceholderPage title="Prompt Battle" file="src/pages/BattlePage.tsx" />} />
+        <Route path="/community" element={<PlaceholderPage title="Community" file="src/pages/CommunityPage.tsx" />} />
+        <Route path="/me" element={<PlaceholderPage title="Me" file="src/pages/MePage.tsx" />} />
       </Route>
     </Routes>
   );

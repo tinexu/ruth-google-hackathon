@@ -3,7 +3,8 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
 
-// https://vite.dev/config/
+// In dev, Vite serves the React app on :5173 and forwards /api to the
+// Express server on :4000, which holds the Gemini key (see backend/src/index.ts).
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   resolve: {
@@ -12,6 +13,7 @@ export default defineConfig({
     },
   },
   server: {
+    port: 5173,
     proxy: {
       '/api': {
         target: 'http://localhost:4000',
