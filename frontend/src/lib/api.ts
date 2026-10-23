@@ -1,4 +1,10 @@
-import type { HomeData } from '@shared/types';
+import type {
+  ApiError,
+  BattleResult,
+  BattlesResponse,
+  HomeData,
+  SubmitRequest,
+} from '@shared/types';
 
 export async function fetchHomeData(): Promise<HomeData> {
   const res = await fetch('/api/home');
@@ -6,4 +12,35 @@ export async function fetchHomeData(): Promise<HomeData> {
     throw new Error(`Server responded with ${res.status}`);
   }
   return (await res.json()) as HomeData;
+}
+
+/** Thrown when the Express server can't be reached (Vite's proxy answers 502/504 or plain text). */
+export class ServerUnavailableError extends Error {}
+
+async function requestJson<T>(path: string, init?: RequestInit): Promise<T> {
+  let res: Response;
+  try {
+    res = await fetch(path, init);
+  } catch {
+    throw new ServerUnavailableError('Could not reach the Pip server.');
+  }
+  const isJson = res.headers.get('content-type')?.includes('application/json');
+  if (!isJson || res.status === 502 || res.status === 504) {
+    throw new ServerUnavailableError('The Pip server is not running.');
+  }
+  const body = (await res.json()) as T | ApiError;
+  if (!res.ok) throw new Error((body as ApiError).error ?? `Server responded with ${res.status}`);
+  return body as T;
+}
+
+export function fetchBattles(): Promise<BattlesResponse> {
+  return requestJson<BattlesResponse>('/api/battles');
+}
+
+export function submitBattlePrompt(challengeId: string, prompt: string): Promise<BattleResult> {
+  return requestJson<BattleResult>(`/api/battles/${encodeURIComponent(challengeId)}/submit`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ prompt } satisfies SubmitRequest),
+  });
 }

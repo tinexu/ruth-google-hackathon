@@ -108,3 +108,15 @@ export const CrossIcon = (p: IconProps) => (
 export const ArrowRightIcon = (p: IconProps) => (
   <svg {...base({ strokeWidth: 2.6, ...p })}><path d="M5 12h14M13 6l6 6-6 6" /></svg>
 );
+export const ImageIcon = (p: IconProps) => (
+  <svg {...base(p)}><rect x="3" y="5" width="18" height="14" rx="3" /><circle cx="9" cy="10" r="1.8" /><path d="M21 16l-5-5-8 8" /></svg>
+);
+export const StepsIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M9 6h11M9 12h11M9 18h11" /><path d="M4 6h.5M4 12h.5M4 18h.5" /></svg>
+);
+export const TabooIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M4 5h16v11H9l-5 4z" /><path d="M9 8.5l6 4M15 8.5l-6 4" /></svg>
+);
+export const ClockIcon = (p: IconProps) => (
+  <svg {...base(p)}><circle cx="12" cy="13" r="8" /><path d="M12 9v4l2 2M10 2h4" /></svg>
+);

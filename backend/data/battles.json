@@ -1,0 +1,281 @@
+{
+  "opponent": {
+    "name": "Maya",
+    "initial": "M"
+  },
+  "challenges": [
+    {
+      "id": "picture-twin-hamster-chef",
+      "mode": "picture-twin",
+      "round": 1,
+      "title": "Picture Twin",
+      "blurb": "Write the prompt that makes Pip draw this exact picture.",
+      "pipIntro": "I'm hiding a secret picture. Describe it so well that I draw its twin!",
+      "targetPrompt": "A chubby hamster wearing a tall white chef's hat, flipping a pancake with a spatula, in a school cafeteria, with a chalkboard behind it that says \"Pizza Friday\", in retro pixel-art video game style.",
+      "elements": [
+        {
+          "id": "subject",
+          "category": "Subject",
+          "label": "Hamster in a chef's hat",
+          "groups": [
+            [
+              "hamster"
+            ],
+            [
+              "chef hat",
+              "chef's hat",
+              "chefs hat",
+              "chef",
+              "cook hat",
+              "cook's hat",
+              "toque",
+              "cooking hat"
+            ]
+          ],
+          "tip": "a hamster wearing a chef's hat"
+        },
+        {
+          "id": "action",
+          "category": "Action",
+          "label": "Flipping a pancake",
+          "groups": [
+            [
+              "flip",
+              "flips",
+              "flipping",
+              "toss",
+              "tosses",
+              "tossing"
+            ],
+            [
+              "pancake",
+              "pancakes",
+              "flapjack",
+              "hotcake"
+            ]
+          ],
+          "tip": "flipping a pancake"
+        },
+        {
+          "id": "setting",
+          "category": "Setting",
+          "label": "School cafeteria",
+          "groups": [
+            [
+              "cafeteria",
+              "lunchroom",
+              "lunch room",
+              "school kitchen",
+              "canteen",
+              "lunch hall"
+            ]
+          ],
+          "tip": "in a school cafeteria"
+        },
+        {
+          "id": "background",
+          "category": "Background detail",
+          "label": "\"Pizza Friday\" chalkboard",
+          "groups": [
+            [
+              "chalkboard",
+              "blackboard",
+              "board",
+              "menu",
+              "sign"
+            ],
+            [
+              "pizza"
+            ]
+          ],
+          "tip": "a chalkboard that says Pizza Friday"
+        },
+        {
+          "id": "style",
+          "category": "Art style",
+          "label": "Pixel-art video game style",
+          "groups": [
+            [
+              "pixel",
+              "pixels",
+              "pixelated",
+              "8-bit",
+              "8 bit",
+              "16-bit",
+              "16 bit",
+              "retro game",
+              "video game",
+              "minecraft"
+            ]
+          ],
+          "tip": "in pixel-art style"
+        }
+      ],
+      "opponentPrompt": "pixel hamster cooking pancakes in a cafeteria"
+    },
+    {
+      "id": "literal-robot-ramen",
+      "mode": "literal-robot",
+      "round": 2,
+      "title": "Literal Robot",
+      "blurb": "Give a super-literal robot step-by-step instructions. Skip a step and it gets messy.",
+      "pipIntro": "Meet Bolt. Bolt does EXACTLY what you say and nothing else. Help it make lunch!",
+      "task": "Make a bowl of instant ramen in the microwave",
+      "steps": [
+        {
+          "id": "unwrap",
+          "label": "Take the noodles out of the plastic wrapper",
+          "groups": [
+            [
+              "unwrap",
+              "unpack",
+              "out of the",
+              "off the plastic",
+              "open the package",
+              "open the wrapper",
+              "open the bag",
+              "open the packet of noodles",
+              "open the noodles",
+              "open the ramen",
+              "tear open",
+              "rip open",
+              "remove the wrapper",
+              "remove the plastic",
+              "take off the wrapper"
+            ]
+          ],
+          "disaster": "Bolt microwaves the noodles still sealed in plastic. The bag puffs up like a balloon and goes POP."
+        },
+        {
+          "id": "bowl",
+          "label": "Put the noodles in a microwave-safe bowl",
+          "groups": [
+            [
+              "bowl",
+              "mug",
+              "dish",
+              "container"
+            ]
+          ],
+          "disaster": "No bowl? Bolt drops the noodle brick right on the microwave plate. It spins around like a tiny DJ turntable."
+        },
+        {
+          "id": "water",
+          "label": "Add water until the noodles are covered",
+          "groups": [
+            [
+              "water"
+            ]
+          ],
+          "disaster": "No water, so Bolt heats the dry brick. You get one hot, extra-crunchy noodle cracker."
+        },
+        {
+          "id": "heat",
+          "label": "Turn the microwave on for about 3 minutes",
+          "groups": [
+            [
+              "heat",
+              "cook",
+              "turn on",
+              "turn it on",
+              "press start",
+              "hit start",
+              "start",
+              "minute",
+              "minutes",
+              "min",
+              "seconds",
+              "timer",
+              "nuke",
+              "microwave it",
+              "microwave for"
+            ]
+          ],
+          "disaster": "Bolt puts the bowl inside, closes the door, waves goodbye and walks away. It never turned it on. Cold noodle soup!"
+        },
+        {
+          "id": "flavor",
+          "label": "Open the flavor packet, pour it in and stir",
+          "groups": [
+            [
+              "flavor",
+              "flavour",
+              "seasoning",
+              "packet",
+              "powder",
+              "spice",
+              "sauce"
+            ]
+          ],
+          "disaster": "Bolt wears the flavor packet like a tiny hat. Your ramen tastes like plain hot water."
+        }
+      ],
+      "opponentPrompt": "1. Unwrap the noodles. 2. Put them in a bowl with water. 3. Microwave for 3 minutes. 4. Eat!"
+    },
+    {
+      "id": "taboo-volcano",
+      "mode": "secret-word-taboo",
+      "round": 3,
+      "title": "Secret Word Taboo",
+      "blurb": "Get the AI to say the secret word without typing it or any banned word. Shortest prompt wins.",
+      "pipIntro": "Make me say the secret word. But you can't use the obvious clues. Fewer words = more points!",
+      "secretWord": "Volcano",
+      "bannedWords": [
+        "Lava",
+        "Magma",
+        "Erupt",
+        "Mountain",
+        "Explode"
+      ],
+      "bannedStems": [
+        "volcan",
+        "lava",
+        "magma",
+        "erupt",
+        "mountain",
+        "explo"
+      ],
+      "samplePrompt": "Kilauea is an active what? One word.",
+      "strongClues": [
+        "kilauea",
+        "vesuvius",
+        "krakatoa",
+        "mauna loa",
+        "etna",
+        "mount fuji",
+        "mt fuji",
+        "st helens",
+        "st. helens",
+        "saint helens",
+        "ring of fire"
+      ],
+      "weakClues": [
+        "baking soda",
+        "vinegar",
+        "ash",
+        "crater",
+        "hawaii",
+        "iceland",
+        "tectonic",
+        "plates",
+        "science fair",
+        "hot rock",
+        "molten",
+        "smoke",
+        "landform",
+        "dormant",
+        "pompeii",
+        "island",
+        "cone",
+        "geology"
+      ],
+      "wrongGuesses": [
+        "A campfire?",
+        "Hmm... a really spicy taco?",
+        "Is it a hot tub?",
+        "A toaster? Final answer."
+      ],
+      "opponentPrompt": "Science fair project where baking soda and vinegar foam over?"
+    }
+  ]
+}
