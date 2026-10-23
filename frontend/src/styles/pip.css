@@ -68,7 +68,7 @@ a:focus-visible, button:focus-visible, [tabindex="-1"]:focus-visible { outline: 
 .page { max-width: 1200px; margin: 0 auto; padding: 28px 24px 56px; display: flex; flex-direction: column; gap: 20px; }
 .page-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 10px 20px; }
 .feed-switch { display: flex; gap: 22px; align-items: baseline; font-family: var(--display); }
-.feed-switch h1 { margin: 0; font-size: 34px; font-weight: 800; line-height: 1.05; }
+.feed-switch h1 { margin: 0; font-size: 34px; font-weight: 800; line-height: 1.05; color: var(--ink); }
 .feed-switch a { font-size: 22px; font-weight: 700; color: var(--muted-dark); text-decoration: none; }
 .feed-switch a:hover { color: var(--white); }
 .page-progress { font-size: 15px; font-weight: 700; color: var(--muted-dark); font-variant-numeric: tabular-nums; }
