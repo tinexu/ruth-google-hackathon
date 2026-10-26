@@ -40,8 +40,8 @@ export function PictureTwinArena(props: ArenaProps<PublicPictureTwin, PictureTwi
             <figcaption className="text-[13px] font-bold text-muted">Target</figcaption>
           </figure>
           <figure className="m-0 flex flex-col gap-1.5">
-            <HamsterScene parts={sceneFromResult(result)} label="Ada's drawing from your prompt" />
-            <figcaption className="text-[13px] font-bold text-muted">Ada drew</figcaption>
+            <HamsterScene parts={sceneFromResult(result)} label="Pip's drawing from your prompt" />
+            <figcaption className="text-[13px] font-bold text-muted">Pip drew</figcaption>
           </figure>
         </div>
 
@@ -93,7 +93,7 @@ export function PictureTwinArena(props: ArenaProps<PublicPictureTwin, PictureTwi
   return (
     <div className="grid gap-5 md:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
       <div className="flex flex-col gap-2">
-        <span className="font-heading text-[20px] font-extrabold">Get Ada to draw this</span>
+        <span className="font-heading text-[20px] font-extrabold">Get Pip to draw this</span>
         <HamsterScene
           parts={FULL_SCENE}
           label="Target picture: a hamster in a chef's hat flipping a pancake in a school cafeteria, with a Pizza Friday chalkboard, in pixel-art style"
@@ -125,7 +125,7 @@ export function PictureTwinArena(props: ArenaProps<PublicPictureTwin, PictureTwi
         error={props.error}
         helper={
           <p className="m-0 text-[14px] text-muted">
-            <span className="font-bold text-ink">Ada tip:</span> say who it is, what it wears, what
+            <span className="font-bold text-ink">Pip tip:</span> say who it is, what it wears, what
             it's doing, where it is, what's behind it, and the art style.
           </p>
         }

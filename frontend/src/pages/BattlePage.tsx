@@ -148,7 +148,7 @@ function BattleArena({
     } catch (e) {
       setError(
         e instanceof ServerUnavailableError
-          ? "Ada can't reach the server right now. Is it running? Try again in a moment."
+          ? "Pip can't reach the server right now. Is it running? Try again in a moment."
           : e instanceof Error
             ? e.message
             : 'Something went wrong.',
@@ -323,7 +323,7 @@ export function BattlePage() {
     return (
       <main className="flex flex-col items-center gap-4 px-6 py-24 text-ink">
         <PipMascot mood="happy" size={100} waving={false} className="animate-pip-bounce" />
-        <p className="font-heading text-lg font-bold text-ink">Ada is setting up the arena…</p>
+        <p className="font-heading text-lg font-bold text-ink">Pip is setting up the arena…</p>
       </main>
     );
   }
@@ -332,7 +332,7 @@ export function BattlePage() {
       <main className="flex flex-col items-center gap-4 px-6 py-24 text-center text-ink">
         <PipMascot mood="worried" size={120} waving={false} />
         <h1 className="font-heading text-2xl font-extrabold text-ink">
-          Ada couldn't load the battles
+          Pip couldn't load the battles
         </h1>
         <p className="max-w-sm text-muted">
           Make sure the server is running, then refresh this page.

@@ -11,7 +11,7 @@ export function NextUpgradeCard({ upgrade }: NextUpgradeCardProps) {
 
   return (
     <div className="rounded-[28px] border-[2.5px] border-ink bg-nav p-6">
-      <h3 className="font-heading text-lg font-extrabold text-sun">Ada's next upgrade</h3>
+      <h3 className="font-heading text-lg font-extrabold text-sun">Pip's next upgrade</h3>
       <p className="mt-2 text-sm text-white/90">{upgrade.description}</p>
 
       <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-white/15">

@@ -32,7 +32,7 @@ function backupNotice(err: unknown): string {
   if (err instanceof FeedApiError && err.status === 503) {
     return 'Gemini isn’t connected yet, so here are some practice cards.';
   }
-  return 'Ada couldn’t make new cards right now, so here are some practice cards.';
+  return 'Pip couldn’t make new cards right now, so here are some practice cards.';
 }
 
 /**

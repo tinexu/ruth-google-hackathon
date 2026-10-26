@@ -26,7 +26,7 @@ function LoadingState() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-ground">
       <PipMascot mood="happy" size={100} waving={false} className="animate-pip-bounce" />
-      <p className="font-heading text-lg font-bold text-ink">Waking Ada up…</p>
+      <p className="font-heading text-lg font-bold text-ink">Waking Pip up…</p>
     </div>
   );
 }
@@ -36,10 +36,10 @@ function ErrorState({ message }: { message: string }) {
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-ground px-6 text-center">
       <PipMascot mood="worried" size={120} waving={false} />
       <h1 className="font-heading text-2xl font-extrabold text-ink">
-        Ada couldn't wake up
+        Pip couldn't wake up
       </h1>
       <p className="max-w-sm text-muted">
-        We couldn't reach the Ada server. Make sure it's running (<code>npm run dev</code> in
+        We couldn't reach the Pip server. Make sure it's running (<code>npm run dev</code> in
         the project root starts both the server and the app), then refresh this page.
       </p>
       <p className="text-xs text-muted/70">{message}</p>

@@ -70,6 +70,6 @@ battlesRouter.post('/battles/:id/submit', async (req, res) => {
     res.json(await gradeSubmission(challenge, prompt, data.opponent.name));
   } catch (err) {
     console.error('Failed to grade battle prompt:', err);
-    res.status(500).json({ error: 'Ada could not grade that prompt.' } satisfies ApiError);
+    res.status(500).json({ error: 'Pip could not grade that prompt.' } satisfies ApiError);
   }
 });

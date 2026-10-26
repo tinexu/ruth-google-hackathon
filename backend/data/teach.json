@@ -3,7 +3,7 @@
     {
       "id": "deepfakes-real-video",
       "category": "Deepfakes",
-      "question": "Teach Ada: is this video real or fake?",
+      "question": "Teach Pip: is this video real or fake?",
       "examples": [
         {
           "label": "Dog-ear filter",
@@ -19,7 +19,7 @@
         }
       ],
       "trainPrompt": "Teach me how to tell real videos from fake ones!",
-      "trainHelp": "Type something you might notice in a video, then tell Ada what it means.",
+      "trainHelp": "Type something you might notice in a video, then tell Pip what it means.",
       "labels": [
         "real",
         "fake"
@@ -31,7 +31,7 @@
       },
       "testCase": "A new music video from a famous singer. Watch her jaw and listen to her voice.",
       "pipMistake": "Totally real!",
-      "uhOh": "Uh oh. None of your examples showed Ada what a realistic deepfake looks like, so it trusted a normal-looking face. Which card should you add?",
+      "uhOh": "Uh oh. None of your examples showed Pip what a realistic deepfake looks like, so it trusted a normal-looking face. Which card should you add?",
       "choices": [
         {
           "letter": "A",
@@ -98,7 +98,7 @@
     {
       "id": "privacy-safe-to-post",
       "category": "Sharing & Privacy",
-      "question": "Teach Ada: what's safe to post online?",
+      "question": "Teach Pip: what's safe to post online?",
       "examples": [
         {
           "label": "Password",
@@ -114,14 +114,14 @@
         }
       ],
       "trainPrompt": "Teach me what's OK to share online!",
-      "trainHelp": "Type a kind of information, then tell Ada if it's private.",
+      "trainHelp": "Type a kind of information, then tell Pip if it's private.",
       "labels": [
         "keep private",
         "OK to post"
       ],
       "testCase": "Jaya types: \"Come over to 42 Maple St after school!\"",
       "pipMistake": "Posting it now!",
-      "uhOh": "Uh oh. Your examples didn't cover home addresses, so Ada is about to share one. Which card should you add?",
+      "uhOh": "Uh oh. Your examples didn't cover home addresses, so Pip is about to share one. Which card should you add?",
       "choices": [
         {
           "letter": "A",
@@ -157,7 +157,7 @@
         }
       ],
       "pipFixed": "Wait, that's private. Not posting!",
-      "explanation": "Secrets aren't just codes. Your address, phone number and live location can lead someone right to you, so Ada keeps them private now too.",
+      "explanation": "Secrets aren't just codes. Your address, phone number and live location can lead someone right to you, so Pip keeps them private now too.",
       "fixVerdict": "keep private",
       "fixKeywords": [
         "address",
@@ -179,7 +179,7 @@
     {
       "id": "voice-clone-call",
       "category": "Voice Cloning",
-      "question": "Teach Ada: who is really calling?",
+      "question": "Teach Pip: who is really calling?",
       "examples": [
         {
           "label": "Mom's voice",
@@ -195,14 +195,14 @@
         }
       ],
       "trainPrompt": "Teach me how to tell who's really calling!",
-      "trainHelp": "Type a clue about a phone call, then tell Ada if it can be trusted.",
+      "trainHelp": "Type a clue about a phone call, then tell Pip if it can be trusted.",
       "labels": [
         "trust it",
         "don't trust it"
       ],
       "testCase": "An unknown number calls. \"Mom\" says she's in trouble and needs gift card codes right now.",
       "pipMistake": "Hi Mom! Sending them!",
-      "uhOh": "Uh oh. Your examples didn't teach Ada that AI can copy a voice, so it trusted a familiar-sounding caller. Which card should you add?",
+      "uhOh": "Uh oh. Your examples didn't teach Pip that AI can copy a voice, so it trusted a familiar-sounding caller. Which card should you add?",
       "choices": [
         {
           "letter": "A",
@@ -263,7 +263,7 @@
     {
       "id": "scam-perfect-grammar",
       "category": "Scam Identification",
-      "question": "Teach Ada: is this message a scam?",
+      "question": "Teach Pip: is this message a scam?",
       "examples": [
         {
           "label": "\"Yuo won $$$\"",
@@ -279,14 +279,14 @@
         }
       ],
       "trainPrompt": "Teach me how to spot scam messages!",
-      "trainHelp": "Type something you might see in a message, then tell Ada if it's a scam.",
+      "trainHelp": "Type something you might see in a message, then tell Pip if it's a scam.",
       "labels": [
         "scam",
         "not a scam"
       ],
       "testCase": "A perfectly written email from support@g00gle-help.co: \"Reset your password within 10 minutes or lose your account.\"",
       "pipMistake": "No typos, so it's safe!",
-      "uhOh": "Uh oh. Your examples didn't show Ada a scam with perfect spelling, so it trusted this one. Which card should you add?",
+      "uhOh": "Uh oh. Your examples didn't show Pip a scam with perfect spelling, so it trusted this one. Which card should you add?",
       "choices": [
         {
           "letter": "A",
@@ -345,7 +345,7 @@
     {
       "id": "homework-help-or-cheat",
       "category": "AI Doing Your Homework",
-      "question": "Teach Ada: is this helping or cheating?",
+      "question": "Teach Pip: is this helping or cheating?",
       "examples": [
         {
           "label": "Explain fractions",
@@ -361,14 +361,14 @@
         }
       ],
       "trainPrompt": "Teach me when AI is helping with homework and when it's cheating!",
-      "trainHelp": "Type a way to use AI for homework, then tell Ada if it's helping or cheating.",
+      "trainHelp": "Type a way to use AI for homework, then tell Pip if it's helping or cheating.",
       "labels": [
         "helping",
         "cheating"
       ],
       "testCase": "Jaya asks: \"Write my whole book report on Hatchet.\"",
       "pipMistake": "Helping! Here's 500 words.",
-      "uhOh": "Uh oh. Your examples didn't show Ada where helping turns into cheating, so it wrote the whole report. Which card should you add?",
+      "uhOh": "Uh oh. Your examples didn't show Pip where helping turns into cheating, so it wrote the whole report. Which card should you add?",
       "choices": [
         {
           "letter": "A",

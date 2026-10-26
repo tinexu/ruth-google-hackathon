@@ -19,7 +19,7 @@ export function PlaceholderPage({ title, file }: PlaceholderPageProps) {
         to="/"
         className="focus-ring inline-flex items-center justify-center gap-2 rounded-2xl border-[2.5px] border-ink bg-sun px-5 py-3 font-heading text-base font-bold text-ink shadow-[0_5px_0_#1B2140] transition-transform duration-100 ease-out hover:-translate-y-0.5 hover:shadow-[0_7px_0_#1B2140] active:translate-y-[3px] active:shadow-[0_1px_0_#1B2140]"
       >
-        Back to My Ada
+        Back to My Pip
       </Link>
     </main>
   );

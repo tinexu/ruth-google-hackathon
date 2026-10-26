@@ -118,7 +118,7 @@ export function SettingsPage() {
             <PreferenceRow
               icon={<BellIcon size={20} />}
               title="Reminders"
-              description="A gentle nudge if you haven't fed Ada today."
+              description="A gentle nudge if you haven't fed Pip today."
               checked={prefs.notifications}
               onChange={(next) => setPreference('notifications', next)}
             />

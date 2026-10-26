@@ -81,7 +81,7 @@ export function CoachCard({ children }: { children: ReactNode }) {
     <div className="flex items-start gap-3 border-t-2 border-border pt-4">
       <PipMascot waving={false} size={46} />
       <div className="flex flex-col gap-1">
-        <span className="font-heading text-[17px] font-extrabold">Ada's coaching</span>
+        <span className="font-heading text-[17px] font-extrabold">Pip's coaching</span>
         <p className="m-0 text-[15px] leading-[1.45]">{children}</p>
       </div>
     </div>
@@ -172,7 +172,7 @@ export function PromptBox({
   error,
   blocked,
   helper,
-  sendLabel = 'Send to Ada',
+  sendLabel = 'Send to Pip',
 }: {
   id: string;
   label: string;
@@ -229,7 +229,7 @@ export function PromptBox({
         disabled={disabled}
         icon={<ZapIcon width={20} height={20} strokeWidth={2.6} className="shrink-0" />}
       >
-        {submitting ? 'Ada is thinking...' : sendLabel}
+        {submitting ? 'Pip is thinking...' : sendLabel}
       </Button>
     </form>
   );

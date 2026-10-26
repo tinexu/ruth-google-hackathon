@@ -52,11 +52,11 @@ export function FeedSidebar({ set, current }: FeedSidebarProps) {
         <p>
           {onScreen
             ? onScreen.why
-            : 'Ada picks 4 topics from 13 ways AI shows up in your life, so every set is a little different.'}
+            : 'Pip picks 4 topics from 13 ways AI shows up in your life, so every set is a little different.'}
         </p>
         <p className="why-note">
           {set?.source === 'backup'
-            ? 'These are Ada’s practice cards, written ahead of time by people.'
+            ? 'These are Pip’s practice cards, written ahead of time by people.'
             : 'Each set is written fresh by an AI called Gemini. AI can make mistakes too, so if a card seems wrong, tell a grown-up!'}
         </p>
       </section>

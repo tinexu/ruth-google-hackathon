@@ -53,7 +53,7 @@ export async function fetchQuestionSet(avoidTopics: number[], signal?: AbortSign
       signal
     });
   } catch {
-    throw new FeedApiError('Could not reach the Ada server.');
+    throw new FeedApiError('Could not reach the Pip server.');
   }
 
   const data: unknown = await res.json().catch(() => null);

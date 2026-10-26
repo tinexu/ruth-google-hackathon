@@ -5,7 +5,7 @@
     "xp": 340
   },
   "pet": {
-    "name": "Ada",
+    "name": "Pip",
     "level": 4,
     "levelTitle": "Curious explorer",
     "mood": "curious",
@@ -46,7 +46,7 @@
       "label": "Friendship",
       "value": 58,
       "color": "mint",
-      "note": "Grows when Ada plays in Community"
+      "note": "Grows when Pip plays in Community"
     }
   ],
   "weekly": {
@@ -59,7 +59,7 @@
     {
       "id": "fake-fact-detective",
       "name": "Fake-fact detective",
-      "description": "Ada can spot when AI makes things up.",
+      "description": "Pip can spot when AI makes things up.",
       "status": "mastered",
       "icon": "search",
       "level": 3,
@@ -68,7 +68,7 @@
     {
       "id": "how-ai-learns",
       "name": "How AI learns",
-      "description": "Ada knows AI learns patterns from examples.",
+      "description": "Pip knows AI learns patterns from examples.",
       "status": "mastered",
       "icon": "bulb",
       "level": 3,
@@ -77,7 +77,7 @@
     {
       "id": "prompt-crafter",
       "name": "Prompt crafter",
-      "description": "Ada writes clear asks with colors and details.",
+      "description": "Pip writes clear asks with colors and details.",
       "status": "in-progress",
       "icon": "pencil",
       "level": 2,
@@ -86,7 +86,7 @@
     {
       "id": "safety-shield",
       "name": "Safety shield",
-      "description": "Ada never shares passwords or addresses.",
+      "description": "Pip never shares passwords or addresses.",
       "status": "in-progress",
       "icon": "shield",
       "level": 1,
@@ -95,7 +95,7 @@
     {
       "id": "fair-judge",
       "name": "Fair judge",
-      "description": "2 more lessons to unlock. Teach Ada about bias.",
+      "description": "2 more lessons to unlock. Teach Pip about bias.",
       "status": "training",
       "icon": "scale",
       "level": 1,

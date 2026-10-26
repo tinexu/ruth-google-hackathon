@@ -75,8 +75,8 @@ export function TabooArena(props: ArenaProps<PublicTaboo, TabooResult>) {
           <p className="m-0 text-[14px] text-muted">
             <span className="font-bold text-ink">
               {result.success
-                ? `Ada said "${result.secretWord}"`
-                : `Ada didn't say "${result.secretWord}"`}
+                ? `Pip said "${result.secretWord}"`
+                : `Pip didn't say "${result.secretWord}"`}
             </span>{' '}
             in a {result.wordCount}-word prompt.
             {result.success && ' Fewer words means more points.'}
@@ -87,7 +87,7 @@ export function TabooArena(props: ArenaProps<PublicTaboo, TabooResult>) {
         <div className="grid gap-2.5 md:grid-cols-2">
           <OpponentReveal opponent={props.opponent} result={result} />
           <PromptReveal
-            who="Ada's sample winning prompt"
+            who="Pip's sample winning prompt"
             initial="P"
             color="#5B86FF"
             prompt={result.samplePrompt}
@@ -124,7 +124,7 @@ export function TabooArena(props: ArenaProps<PublicTaboo, TabooResult>) {
         submitting={props.submitting}
         error={props.error}
         blocked={banned.length > 0}
-        sendLabel="Ask Ada"
+        sendLabel="Ask Pip"
         helper={
           <div className="flex flex-col gap-1.5" aria-live="polite">
             {banned.length > 0 && (
@@ -136,11 +136,11 @@ export function TabooArena(props: ArenaProps<PublicTaboo, TabooResult>) {
             <div className="flex flex-wrap items-center gap-1.5 text-[13px] text-muted">
               <span className="font-bold text-ink tabular-nums">{words.length} words</span>
               {words.length > 0 && banned.length === 0 && (
-                <span>· up to {projected} points if Ada gets it</span>
+                <span>· up to {projected} points if Pip gets it</span>
               )}
               {words.length === 0 && (
                 <span className="font-bold">
-                  Ada tip: name a famous example instead of describing it.
+                  Pip tip: name a famous example instead of describing it.
                 </span>
               )}
             </div>
