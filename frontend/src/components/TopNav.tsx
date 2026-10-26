@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { PipMascot } from './PipMascot';
 import { Pill } from './Pill';
 import {
@@ -29,10 +29,15 @@ export function TopNav({ streakDays, xp }: TopNavProps) {
   return (
     <header className="w-full border-b border-nav-border bg-nav">
       <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-6">
-        <div className="flex items-center gap-2">
+        {/* The logo goes home to Pip's room, like most sites' logos */}
+        <Link
+          to="/"
+          aria-label="Pip: go to your room"
+          className="focus-ring -m-1 flex min-h-11 items-center gap-2 rounded-full p-1 pr-2 transition-transform hover:scale-105"
+        >
           <PipMascot size={30} waving={false} className="shrink-0" />
           <span className="hidden font-heading text-xl font-extrabold text-white sm:inline">Pip</span>
-        </div>
+        </Link>
 
         {/* Icons only on narrow screens so the bar never runs off the edge; labels stay for screen readers. */}
         <nav className="flex min-w-0 items-center gap-0.5 sm:gap-1" aria-label="Main">
