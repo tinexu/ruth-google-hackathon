@@ -3,6 +3,7 @@
 // backend/data/progression.json; the math lives here.
 
 import type {
+  BattleDifficulty,
   CommunityData,
   HomeData,
   LeaderboardEntry,
@@ -12,6 +13,7 @@ import type {
   SkillStatus,
   Stat,
   StatColor,
+  WeekDay,
 } from '../../../shared/types.js';
 import type { SessionUser } from '../auth/sessions.js';
 import { loadBattles, loadProgression, type Progression } from '../data.js';
@@ -116,10 +118,27 @@ function moodFor(s: ActivitySummary, today: string): { mood: PetMood; speech: st
   return { mood: 'sleepy', speech: 'Zzz… oh, hi! Let’s wake my brain up with a Feed card.' };
 }
 
+/** Daily goal: a small, reachable target (about 2-3 activities), like a "regular" Duolingo goal. */
+const DAILY_GOAL_XP = 50;
+const WEEKDAY_LETTERS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+
+function lastSevenDays(activeDays: string[], today: string): WeekDay[] {
+  const active = new Set(activeDays);
+  return Array.from({ length: 7 }, (_, i) => {
+    const date = addDays(today, i - 6);
+    return {
+      date,
+      label: WEEKDAY_LETTERS[new Date(`${date}T00:00:00Z`).getUTCDay()],
+      active: active.has(date),
+      isToday: date === today,
+    };
+  });
+}
+
 export function buildHomeData(user: SessionUser): HomeData {
   const p = loadProgression();
   const today = localDay(user.timezone);
-  const s = summarize(user.id, addDays(today, -6));
+  const s = summarize(user.id, addDays(today, -6), today);
   const level = levelForXp(p, s.xp);
   const values = statValues(s, today, loadBattles().challenges.length);
 
@@ -131,6 +150,7 @@ export function buildHomeData(user: SessionUser): HomeData {
       levelTitle: tierForLevel(p, level).petTitle,
       ...moodFor(s, today),
       nextLevelXp: xpForLevel(p, level + 1),
+      levelStartXp: xpForLevel(p, level),
     },
     stats: p.stats.map((def) => ({ ...def, value: values[def.key] })),
     weekly: {
@@ -140,7 +160,37 @@ export function buildHomeData(user: SessionUser): HomeData {
     },
     skills: skillsFor(p, s, level),
     totalSkills: p.totalSkills,
+    today: {
+      xp: s.today.xp,
+      goalXp: DAILY_GOAL_XP,
+      feedCards: s.today.feed,
+      battleRounds: s.today.battle,
+      trainFixes: s.today.teach,
+    },
+    week: lastSevenDays(s.activeDays, today),
   };
+}
+
+/** The kid's current Pip level, from their saved XP. */
+export function playerLevel(user: SessionUser): number {
+  const p = loadProgression();
+  return levelForXp(p, summarize(user.id, '9999-12-31').xp);
+}
+
+/** Pip level each battle difficulty unlocks at, in order. Matches the growth tiers. */
+export const BATTLE_DIFFICULTY_LEVELS: { difficulty: BattleDifficulty; level: number }[] = [
+  { difficulty: 'easy', level: 1 },
+  { difficulty: 'medium', level: 3 },
+  { difficulty: 'hard', level: 6 },
+];
+
+export function battleDifficultyFor(level: number): {
+  difficulty: BattleDifficulty;
+  next?: { difficulty: BattleDifficulty; level: number };
+} {
+  const unlocked = BATTLE_DIFFICULTY_LEVELS.filter((d) => level >= d.level);
+  const current = unlocked[unlocked.length - 1] ?? BATTLE_DIFFICULTY_LEVELS[0];
+  return { difficulty: current.difficulty, next: BATTLE_DIFFICULTY_LEVELS.find((d) => d.level > level) };
 }
 
 const LEADERBOARD_SIZE = 10;

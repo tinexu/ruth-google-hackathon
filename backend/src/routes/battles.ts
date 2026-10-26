@@ -8,6 +8,7 @@ import type {
 } from '../../../shared/types.js';
 import { userOf } from '../auth/sessions.js';
 import { loadBattles } from '../data.js';
+import { battleDifficultyFor, playerLevel } from '../progress/rules.js';
 import { recordBattle } from '../progress/store.js';
 import { gradeSubmission } from '../grading/index.js';
 
@@ -17,7 +18,15 @@ const MAX_PROMPT_LENGTH = 1000;
 
 /** Strip answer keys and the opponent's prompt before sending a challenge to the browser. */
 function toPublicChallenge(c: BattleChallenge): PublicChallenge {
-  const base = { id: c.id, round: c.round, title: c.title, blurb: c.blurb, pipIntro: c.pipIntro };
+  const base = {
+    id: c.id,
+    round: c.round,
+    difficulty: c.difficulty,
+    timeLimitSeconds: c.timeLimitSeconds,
+    title: c.title,
+    blurb: c.blurb,
+    pipIntro: c.pipIntro,
+  };
   switch (c.mode) {
     case 'picture-twin':
       return {
@@ -34,17 +43,27 @@ function toPublicChallenge(c: BattleChallenge): PublicChallenge {
         secretWord: c.secretWord,
         bannedWords: c.bannedWords,
         bannedStems: c.bannedStems,
+        freeWords: c.freeWords,
       };
   }
 }
 
-// GET /api/battles -> { opponent, challenges } (no answer keys)
+// GET /api/battles -> the 3 rounds at the kid's difficulty (no answer keys).
+// Battles grow harder as Pip levels up: easy at Lv 1-2, medium at 3-5, hard at 6+.
 battlesRouter.get('/battles', (_req, res) => {
   try {
     const data = loadBattles();
+    const level = playerLevel(userOf(res));
+    const { difficulty, next } = battleDifficultyFor(level);
     const body: BattlesResponse = {
       opponent: data.opponent,
-      challenges: [...data.challenges].sort((a, b) => a.round - b.round).map(toPublicChallenge),
+      challenges: data.challenges
+        .filter((c) => c.difficulty === difficulty)
+        .sort((a, b) => a.round - b.round)
+        .map(toPublicChallenge),
+      difficulty,
+      playerLevel: level,
+      next,
     };
     res.json(body);
   } catch (err) {

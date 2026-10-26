@@ -18,6 +18,27 @@ export interface Pet {
   speech: string;
   /** Total XP needed to reach the next level (drives the Train page progress bar). */
   nextLevelXp?: number;
+  /** Total XP the current level started at, so progress bars can show "XP into this level". */
+  levelStartXp?: number;
+}
+
+/** What the kid has done today (their own time zone), for the daily goal and quests. */
+export interface TodayProgress {
+  xp: number;
+  goalXp: number;
+  feedCards: number;
+  battleRounds: number;
+  trainFixes: number;
+}
+
+/** One of the last 7 days, oldest first, for the streak week strip. */
+export interface WeekDay {
+  /** YYYY-MM-DD */
+  date: string;
+  /** Short weekday label, e.g. "M". */
+  label: string;
+  active: boolean;
+  isToday: boolean;
 }
 
 export type StatColor = 'sun' | 'pip-blue' | 'coral' | 'mint';
@@ -58,6 +79,8 @@ export interface HomeData {
   skills: Skill[];
   /** Total skills in the curriculum (more unlock later than the cards shown here). */
   totalSkills: number;
+  today: TodayProgress;
+  week: WeekDay[];
 }
 
 // ---------- Prompt Battles ----------
@@ -83,10 +106,16 @@ export interface RobotStep {
   disaster: string;
 }
 
+/** Battles get harder as Pip levels up: easy (Lv 1-2), medium (Lv 3-5), hard (Lv 6+). */
+export type BattleDifficulty = 'easy' | 'medium' | 'hard';
+
 interface ChallengeBase {
   id: string;
   mode: BattleMode;
   round: number;
+  difficulty: BattleDifficulty;
+  /** How long kids get to write their prompt. */
+  timeLimitSeconds: number;
   title: string;
   blurb: string;
   pipIntro: string;
@@ -111,6 +140,8 @@ export interface TabooChallenge extends ChallengeBase {
   bannedWords: string[];
   /** Word stems that count as using a banned word (e.g. "erupt" catches "eruption"). */
   bannedStems: string[];
+  /** Prompts up to this many words get full points; each extra word costs 5. */
+  freeWords: number;
   samplePrompt: string;
   /** Any one of these alone makes the AI guess right. */
   strongClues: string[];
@@ -138,6 +169,8 @@ interface PublicBase {
   id: string;
   mode: BattleMode;
   round: number;
+  difficulty: BattleDifficulty;
+  timeLimitSeconds: number;
   title: string;
   blurb: string;
   pipIntro: string;
@@ -159,13 +192,19 @@ export interface PublicTaboo extends PublicBase {
   secretWord: string;
   bannedWords: string[];
   bannedStems: string[];
+  freeWords: number;
 }
 
 export type PublicChallenge = PublicPictureTwin | PublicLiteralRobot | PublicTaboo;
 
 export interface BattlesResponse {
   opponent: Opponent;
+  /** The 3 rounds (one per mode) at the kid's current difficulty. */
   challenges: PublicChallenge[];
+  difficulty: BattleDifficulty;
+  playerLevel: number;
+  /** The next difficulty and the Pip level that unlocks it; absent at hard. */
+  next?: { difficulty: BattleDifficulty; level: number };
 }
 
 // ---------- POST /api/battles/:id/submit ----------
@@ -190,6 +229,8 @@ export interface ElementScore {
   category: string;
   label: string;
   points: number;
+  /** What this element is worth: 100 split across the challenge's elements. */
+  maxPoints: number;
   matchedGroups: boolean[];
 }
 
@@ -203,6 +244,8 @@ export interface RobotStepResult {
   id: string;
   label: string;
   done: boolean;
+  /** Points this step earned (100 split across the steps; 0 if skipped). */
+  points: number;
   disaster: string;
 }
 

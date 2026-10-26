@@ -1,136 +1,99 @@
 import { useNavigate, useOutletContext } from 'react-router-dom';
 import type { HomeData } from '@shared/types';
-import { getLowestStat, getUnlockedSkillCount } from '../lib/derive';
+import { getLowestStat } from '../lib/derive';
 import { PipMascot } from '../components/PipMascot';
 import { SpeechBubble } from '../components/SpeechBubble';
-import { Pill } from '../components/Pill';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
-import { StatBar } from '../components/StatBar';
-import { SkillCard } from '../components/SkillCard';
-import { FeedIcon, ZapIcon, UsersIcon } from '../components/icons';
+import { ArrowRightIcon } from '../components/icons';
+import { DailyGoalCard } from '../components/home/DailyGoalCard';
+import { HealthCard } from '../components/home/HealthCard';
+import { SkillsCard } from '../components/home/SkillsCard';
+import { StreakCard } from '../components/home/StreakCard';
+import { dailyQuests, nextStep } from '../components/home/quests';
 
+// Dashboard layout, top to bottom on phones:
+//  1. Pip + one big "next step" button (one clear action, not three equal ones)
+//  2. Daily goal ring + today's quests (small, reachable targets)
+//  3. Streak week strip (the habit), 4. Pip's stats with one tip, 5. skills as a short list
 export function HomePage() {
   const data = useOutletContext<HomeData>();
   const navigate = useNavigate();
-  const { kid, pet, stats, weekly, skills, totalSkills } = data;
+  const { kid, pet, stats, weekly, skills, totalSkills, today, week } = data;
 
   const lowest = getLowestStat(stats);
-  const unlockedCount = getUnlockedSkillCount(skills);
+  const quests = dailyQuests(today);
+  const next = nextStep(quests, lowest);
+
+  const levelStart = pet.levelStartXp ?? 0;
+  const levelEnd = pet.nextLevelXp ?? levelStart + 100;
+  const levelPercent = Math.min(100, Math.round(((kid.xp - levelStart) / Math.max(1, levelEnd - levelStart)) * 100));
 
   return (
-    <main className="mx-auto max-w-[1360px] px-6 py-10">
-      {/* greeting */}
-      <h1 className="font-heading text-[40px] font-extrabold leading-tight text-ink">
-        Hi {kid.name}, Pip missed you!
-      </h1>
+    <main className="mx-auto max-w-[1200px] px-6 py-10 text-ink">
+      <h1 className="font-heading text-[40px] font-extrabold leading-tight">Hi {kid.name}!</h1>
       <p className="mt-1 text-lg text-muted">
-        Pip is feeling {pet.mood} today. Teach it something new?
+        {today.xp >= today.goalXp
+          ? 'You hit today’s goal. Nice work!'
+          : today.xp > 0
+            ? `${today.goalXp - today.xp} XP to go for today’s goal.`
+            : 'Ready for today? Your next step is right below Pip.'}
       </p>
 
-      {/* two column row */}
-      <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
-        {/* pet stage card */}
-        <Card
-          border="solid"
-          rounded="rounded-[32px]"
-          className="flex flex-col bg-pip-blue-light p-8"
+      <div className="mt-8 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1.25fr_1fr]">
+        {/* Pip, level progress and the one main action */}
+        <section
+          aria-labelledby="pip-name"
+          className="flex flex-col gap-5 rounded-[32px] border-[2.5px] border-ink bg-pip-blue-light p-6 sm:p-8"
         >
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 className="font-heading text-2xl font-extrabold text-ink">{pet.name}</h2>
-              <p className="text-sm font-semibold text-muted">
-                Level {pet.level} · {pet.levelTitle}
-              </p>
+          <SpeechBubble className="max-w-sm self-start">{pet.speech}</SpeechBubble>
+
+          <div className="flex justify-center">
+            <PipMascot size={220} waving className="animate-pip-bounce" />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <div className="flex items-baseline justify-between gap-3">
+              <h2 id="pip-name" className="font-heading text-2xl font-extrabold">
+                {pet.name} · Level {pet.level}
+              </h2>
+              <span className="text-sm font-bold text-muted">{pet.levelTitle}</span>
             </div>
-            <Pill tone="white" icon={<span className="h-2.5 w-2.5 rounded-full bg-mint" aria-hidden />}>
-              Mood: {pet.mood}
-            </Pill>
-          </div>
-
-          <SpeechBubble className="mt-6 max-w-sm self-start">{pet.speech}</SpeechBubble>
-
-          <div className="flex flex-1 items-center justify-center py-4">
-            <PipMascot mood="happy" size={280} waving className="animate-pip-bounce" />
-          </div>
-
-          <div className="flex flex-wrap items-center justify-center gap-3">
-            <Button
-              variant="sun"
-              icon={<FeedIcon width={18} height={18} className="stroke-ink" />}
-              onClick={() => navigate('/feed')}
+            <div
+              role="progressbar"
+              aria-label={`Progress to level ${pet.level + 1}`}
+              aria-valuemin={levelStart}
+              aria-valuemax={levelEnd}
+              aria-valuenow={kid.xp}
+              className="h-4 overflow-hidden rounded-full border-2 border-ink bg-white"
             >
-              Feed Pip a lesson
-            </Button>
-            <Button
-              variant="coral"
-              icon={<ZapIcon width={18} height={18} className="stroke-ink" />}
-              onClick={() => navigate('/battle')}
-            >
-              Prompt Battle
-            </Button>
-            <Button
-              variant="white"
-              icon={<UsersIcon width={18} height={18} className="stroke-ink" />}
-              onClick={() => navigate('/community')}
-            >
-              Take Pip to play
-            </Button>
-          </div>
-        </Card>
-
-        {/* health report card */}
-        <Card border="solid" rounded="rounded-[28px]" className="flex flex-col bg-white p-7">
-          <div>
-            <p className="text-xs font-bold tracking-wide text-muted">HEALTH REPORT CARD</p>
-            <h2 className="mt-1 font-heading text-2xl font-extrabold text-ink">
-              How Pip is doing
-            </h2>
-          </div>
-
-          <div className="mt-6 flex flex-col gap-4">
-            {stats.map((stat) => (
-              <StatBar key={stat.key} stat={stat} needsCare={lowest?.key === stat.key} />
-            ))}
-          </div>
-
-          <div className="mt-auto flex gap-10 border-t border-border pt-5 text-left">
-            <WeeklyStat value={weekly.cardsThisWeek} label="cards this week" />
-            <WeeklyStat value={weekly.battlesWon} label="battles won" />
-            <WeeklyStat value={weekly.fakesCaught} label="fakes caught" />
-          </div>
-        </Card>
-      </div>
-
-      {/* skills section */}
-      <section className="mt-12">
-        <div className="flex flex-wrap items-end justify-between gap-2">
-          <div>
-            <h2 className="font-heading text-2xl font-extrabold text-ink">What Pip knows</h2>
-            <p className="mt-1 text-muted">
-              Every skill Pip learns can be used when it plays in Community.
+              <div className="h-full bg-mint transition-[width] duration-500" style={{ width: `${levelPercent}%` }} />
+            </div>
+            <p className="text-sm text-muted tabular-nums">
+              <b className="text-ink">{Math.max(0, levelEnd - kid.xp)} XP</b> to level {pet.level + 1}
             </p>
           </div>
-          <p className="font-heading text-sm font-bold text-ink">
-            {unlockedCount} of {totalSkills} skills unlocked
-          </p>
-        </div>
 
-        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {skills.map((skill) => (
-            <SkillCard key={skill.id} skill={skill} />
-          ))}
+          <div className="flex flex-col gap-2">
+            <Button variant="sun" onClick={() => navigate(next.to)} className="w-full py-4 text-lg">
+              {next.label}
+              <ArrowRightIcon size={20} />
+            </Button>
+            <p className="text-center text-sm text-muted">{next.reason}</p>
+          </div>
+        </section>
+
+        {/* Today: goal + quests, then the streak */}
+        <div className="flex flex-col gap-6">
+          <DailyGoalCard today={today} quests={quests} />
+          <StreakCard streakDays={kid.streakDays} week={week} weekly={weekly} />
         </div>
-      </section>
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 items-start gap-6 lg:grid-cols-[1fr_1.25fr]">
+        <HealthCard stats={stats} lowest={lowest} />
+
+        <SkillsCard skills={skills} totalSkills={totalSkills} />
+      </div>
     </main>
-  );
-}
-
-function WeeklyStat({ value, label }: { value: number; label: string }) {
-  return (
-    <div>
-      <p className="font-heading text-2xl font-extrabold text-ink">{value}</p>
-      <p className="text-xs text-muted">{label}</p>
-    </div>
   );
 }

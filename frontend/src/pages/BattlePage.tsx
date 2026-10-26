@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
 import type {
+  BattleDifficulty,
   BattleResult,
   BattlesResponse,
   Kid,
@@ -22,7 +23,15 @@ import { TabooArena } from '../components/battle/TabooArena';
 import type { ArenaProps } from '../components/battle/types';
 import { VersusBanner } from '../components/battle/VersusBanner';
 
-const ROUND_SECONDS = 30;
+const DIFFICULTY_LABEL: Record<BattleDifficulty, string> = {
+  easy: 'Easy',
+  medium: 'Medium',
+  hard: 'Hard',
+};
+
+function formatClock(seconds: number): string {
+  return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+}
 
 function usesBannedWord(challenge: PublicChallenge, prompt: string): boolean {
   if (challenge.mode !== 'secret-word-taboo') return false;
@@ -43,7 +52,7 @@ function TimerPill({ seconds }: { seconds: number }) {
       }`}
     >
       <ClockIcon width={16} height={16} strokeWidth={2.4} className="shrink-0" />
-      0:{String(seconds).padStart(2, '0')}
+      {formatClock(seconds)}
     </span>
   );
 }
@@ -67,7 +76,9 @@ function BattleArena({
   // XP only counts the first time you play a round, even across "Play again".
   const awarded = useRef(new Set<string>());
 
-  const [timeLeft, setTimeLeft] = useState(ROUND_SECONDS);
+  // Each round sets its own time limit: more time on easier battles.
+  const limitFor = (id: string) => challenges.find((c) => c.id === id)?.timeLimitSeconds ?? 30;
+  const [timeLeft, setTimeLeft] = useState(() => limitFor(challenges[0]?.id ?? ''));
   const [timedOut, setTimedOut] = useState(false);
   const [timerRun, setTimerRun] = useState(0);
 
@@ -77,12 +88,12 @@ function BattleArena({
   const timerActive = Boolean(active) && !showResult && !submitting && !timedOut;
 
   // Refs let the interval read the latest values without restarting every second.
-  const timeLeftRef = useRef(ROUND_SECONDS);
+  const timeLeftRef = useRef(timeLeft);
   const onTimeUpRef = useRef<() => void>(() => {});
 
-  function restartTimer() {
-    timeLeftRef.current = ROUND_SECONDS;
-    setTimeLeft(ROUND_SECONDS);
+  function restartTimer(seconds = limitFor(activeId)) {
+    timeLeftRef.current = seconds;
+    setTimeLeft(seconds);
     setTimedOut(false);
     setTimerRun((n) => n + 1);
   }
@@ -122,7 +133,7 @@ function BattleArena({
   function goTo(id: string) {
     setActiveId(id);
     setError(null);
-    restartTimer();
+    restartTimer(limitFor(id));
     document.getElementById('arena')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
@@ -201,10 +212,10 @@ function BattleArena({
           type="button"
           variant="coral"
           className="py-4"
-          onClick={restartTimer}
+          onClick={() => restartTimer()}
           icon={<ClockIcon width={20} height={20} strokeWidth={2.6} className="shrink-0" />}
         >
-          Try again ({ROUND_SECONDS} seconds)
+          Try again ({active.timeLimitSeconds} seconds)
         </Button>
       </div>
     );
@@ -242,11 +253,19 @@ function BattleArena({
   return (
     <main className="mx-auto flex max-w-[920px] flex-col gap-6 px-6 py-10 text-ink">
       <header className="flex flex-col gap-1">
-        <h1 className="font-heading text-[40px] font-extrabold leading-tight text-ink">
-          Prompt Battles
-        </h1>
+        <div className="flex flex-wrap items-center gap-3">
+          <h1 className="font-heading text-[40px] font-extrabold leading-tight text-ink">
+            Prompt Battles
+          </h1>
+          <span className="rounded-full border-2 border-ink bg-white px-3 py-1 font-heading text-sm font-bold">
+            {DIFFICULTY_LABEL[battles.difficulty]} · Level {battles.playerLevel}
+          </span>
+        </div>
         <p className="text-lg text-muted">
-          Beat {opponent.name} in 3 rounds. You get {ROUND_SECONDS} seconds to write each prompt.
+          Beat {opponent.name} in 3 rounds. You get {active.timeLimitSeconds} seconds to write each
+          prompt.
+          {battles.next &&
+            ` ${DIFFICULTY_LABEL[battles.next.difficulty]} battles unlock when Pip reaches level ${battles.next.level}.`}
         </p>
       </header>
 

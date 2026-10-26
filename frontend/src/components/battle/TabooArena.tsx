@@ -108,7 +108,7 @@ export function TabooArena(props: ArenaProps<PublicTaboo, TabooResult>) {
       words.filter((w) => challenge.bannedStems.some((s) => w.toLowerCase().startsWith(s))),
     ),
   ];
-  const projected = Math.max(40, 100 - 5 * Math.max(0, words.length - 5));
+  const projected = Math.max(40, 100 - 5 * Math.max(0, words.length - challenge.freeWords));
 
   return (
     <div className="grid gap-5 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">

@@ -108,7 +108,7 @@ export function LiteralRobotArena(props: ArenaProps<PublicLiteralRobot, LiteralR
               </h4>
               <span className="text-[13px] font-bold text-muted">
                 {missed === 0
-                  ? 'Perfect ramen. Not a single mess!'
+                  ? 'Perfect! Not a single mess!'
                   : `${missed} robot disaster${missed > 1 ? 's' : ''}`}
               </span>
             </div>
@@ -124,7 +124,7 @@ export function LiteralRobotArena(props: ArenaProps<PublicLiteralRobot, LiteralR
                     <CheckIcon width={14} height={14} strokeWidth={3} className="shrink-0" />
                   </span>
                   <span className="min-w-0 flex-1">{step.label}</span>
-                  <span className="font-heading font-extrabold">+20</span>
+                  <span className="font-heading font-extrabold">+{step.points}</span>
                 </li>
               ) : (
                 <li
@@ -177,7 +177,7 @@ export function LiteralRobotArena(props: ArenaProps<PublicLiteralRobot, LiteralR
           {[
             'Bolt follows your words exactly, in order.',
             'Bolt has zero common sense. If you skip it, Bolt skips it.',
-            `The judge looks for ${challenge.stepCount} must-have steps (20 pts each).`,
+            `The judge looks for ${challenge.stepCount} must-have steps (${Math.round(100 / challenge.stepCount)} pts each).`,
           ].map((rule) => (
             <li key={rule} className="flex items-start gap-2">
               <span className="mt-0.5 text-pip-blue">

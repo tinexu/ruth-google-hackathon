@@ -79,6 +79,8 @@ export function touchActiveDay(user: SessionUser): void {
 
 export interface ActivitySummary {
   xp: number;
+  /** Activity on `today` (the day passed to summarize). */
+  today: { xp: number; feed: number; battle: number; teach: number };
   feedCorrect: number;
   feedCorrectThisWeek: number;
   feedAnsweredThisWeek: number;
@@ -88,7 +90,7 @@ export interface ActivitySummary {
   activeDays: string[];
 }
 
-export function summarize(userId: number, weekStart: string): ActivitySummary {
+export function summarize(userId: number, weekStart: string, today = ''): ActivitySummary {
   const rows = db
     .prepare('SELECT kind, item_key, correct, score, outcome, xp, local_day FROM activity WHERE user_id = ?')
     .all(userId) as {
@@ -106,6 +108,7 @@ export function summarize(userId: number, weekStart: string): ActivitySummary {
 
   const s: ActivitySummary = {
     xp: 0,
+    today: { xp: 0, feed: 0, battle: 0, teach: 0 },
     feedCorrect: 0,
     feedCorrectThisWeek: 0,
     feedAnsweredThisWeek: 0,
@@ -116,6 +119,10 @@ export function summarize(userId: number, weekStart: string): ActivitySummary {
   };
   for (const r of rows) {
     s.xp += r.xp;
+    if (r.local_day === today) {
+      s.today.xp += r.xp;
+      s.today[r.kind] += 1;
+    }
     const thisWeek = r.local_day >= weekStart;
     if (r.kind === 'feed') {
       if (r.correct) s.feedCorrect += 1;

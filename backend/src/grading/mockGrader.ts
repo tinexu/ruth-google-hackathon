@@ -23,14 +23,33 @@ function outcomeOf(score: number, opponentScore: number): Outcome {
 
 // ---------- Picture Twin ----------
 
-function scorePicture(challenge: PictureTwinChallenge, prompt: string): ElementScore[] {
+// 100 points split across however many elements or steps a challenge has, so
+// an easy 3-detail picture and a hard 5-detail one both top out at 100.
+const share = (count: number) => 100 / Math.max(1, count);
+const total = (parts: number[]) => Math.round(parts.reduce((a, b) => a + b, 0));
+
+/** Each element is worth an equal share; matching some of its keyword groups earns half. */
+function pictureParts(challenge: PictureTwinChallenge, prompt: string): number[] {
   const text = normalize(prompt);
   return challenge.elements.map((el) => {
-    const matchedGroups = el.groups.map((g) => matchesGroup(text, g));
-    const hits = matchedGroups.filter(Boolean).length;
-    const points = hits === el.groups.length ? 20 : hits > 0 ? 10 : 0;
-    return { id: el.id, category: el.category, label: el.label, points, matchedGroups };
+    const hits = el.groups.filter((g) => matchesGroup(text, g)).length;
+    const fraction = hits === el.groups.length ? 1 : hits > 0 ? 0.5 : 0;
+    return share(challenge.elements.length) * fraction;
   });
+}
+
+function scorePicture(challenge: PictureTwinChallenge, prompt: string): ElementScore[] {
+  const text = normalize(prompt);
+  const parts = pictureParts(challenge, prompt);
+  const maxPoints = Math.round(share(challenge.elements.length));
+  return challenge.elements.map((el, i) => ({
+    id: el.id,
+    category: el.category,
+    label: el.label,
+    points: Math.round(parts[i]),
+    maxPoints,
+    matchedGroups: el.groups.map((g) => matchesGroup(text, g)),
+  }));
 }
 
 function gradePictureTwin(
@@ -39,14 +58,11 @@ function gradePictureTwin(
   opponentName: string,
 ): BattleResult {
   const elements = scorePicture(challenge, prompt);
-  const score = elements.reduce((sum, e) => sum + e.points, 0);
-  const opponentScore = scorePicture(challenge, challenge.opponentPrompt).reduce(
-    (sum, e) => sum + e.points,
-    0,
-  );
+  const score = total(pictureParts(challenge, prompt));
+  const opponentScore = total(pictureParts(challenge, challenge.opponentPrompt));
   const outcome = outcomeOf(score, opponentScore);
 
-  const missed = challenge.elements.filter((_, i) => elements[i].points < 20);
+  const missed = challenge.elements.filter((_, i) => elements[i].points < elements[i].maxPoints);
   let coaching: string;
   if (missed.length === 0) {
     coaching = "Twins! You described every detail, so I didn't have to guess anything.";
@@ -73,12 +89,16 @@ function gradePictureTwin(
 
 function scoreRobot(challenge: LiteralRobotChallenge, prompt: string): RobotStepResult[] {
   const text = normalize(prompt);
-  return challenge.steps.map((step) => ({
-    id: step.id,
-    label: step.label,
-    done: step.groups.every((g) => matchesGroup(text, g)),
-    disaster: step.disaster,
-  }));
+  return challenge.steps.map((step) => {
+    const done = step.groups.every((g) => matchesGroup(text, g));
+    return {
+      id: step.id,
+      label: step.label,
+      done,
+      points: done ? Math.round(share(challenge.steps.length)) : 0,
+      disaster: step.disaster,
+    };
+  });
 }
 
 function gradeLiteralRobot(
@@ -87,15 +107,16 @@ function gradeLiteralRobot(
   opponentName: string,
 ): BattleResult {
   const steps = scoreRobot(challenge, prompt);
-  const score = steps.filter((s) => s.done).length * 20;
-  const opponentScore =
-    scoreRobot(challenge, challenge.opponentPrompt).filter((s) => s.done).length * 20;
+  const robotScore = (s: RobotStepResult[]) =>
+    total(s.map((step) => (step.done ? share(s.length) : 0)));
+  const score = robotScore(steps);
+  const opponentScore = robotScore(scoreRobot(challenge, challenge.opponentPrompt));
   const outcome = outcomeOf(score, opponentScore);
 
   const missed = steps.filter((s) => !s.done);
   const coaching =
     missed.length === 0
-      ? "Bolt made perfect ramen! You didn't skip a single step. Robots need every step spelled out."
+      ? `Bolt did it: "${challenge.task.toLowerCase()}" with no mess! You didn't skip a single step. Robots need every step spelled out.`
       : `Bolt has zero common sense. It only follows your words. Add a step like "${missed[0].label.toLowerCase()}."`;
 
   return {
@@ -143,7 +164,8 @@ function playTaboo(challenge: TabooChallenge, prompt: string): TabooAttempt {
   const strong = challenge.strongClues.some((c) => hasPhrase(text, c));
   const weakHits = challenge.weakClues.filter((c) => hasPhrase(text, c)).length;
   if (strong || weakHits >= 2) {
-    const score = Math.max(40, 100 - 5 * Math.max(0, wordCount - 5));
+    // Up to freeWords words gets full points; each extra word costs 5 (never below 40).
+    const score = Math.max(40, 100 - 5 * Math.max(0, wordCount - challenge.freeWords));
     return { score, success: true, usedBanned, aiReply: `${challenge.secretWord}!`, wordCount };
   }
 
