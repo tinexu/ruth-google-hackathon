@@ -3,12 +3,12 @@ import { BulbIcon, EyeIcon, LockIcon, PencilIcon, ScaleIcon, SearchIcon, ShieldI
 
 const ICONS = { search: SearchIcon, bulb: BulbIcon, pencil: PencilIcon, shield: ShieldIcon, scale: ScaleIcon, eye: EyeIcon };
 const TILE: Record<Skill['icon'], string> = {
-  search: 'bg-sun',
-  bulb: 'bg-pip-blue',
-  pencil: 'bg-coral',
-  shield: 'bg-mint',
-  scale: 'bg-coral',
-  eye: 'bg-sun',
+  search: 'bg-room-sun',
+  bulb: 'bg-room-blue text-white',
+  pencil: 'bg-room-orange',
+  shield: 'bg-room-green text-white',
+  scale: 'bg-room-orange',
+  eye: 'bg-room-sun',
 };
 
 function statusText(skill: Skill): string {
@@ -31,7 +31,7 @@ function statusText(skill: Skill): string {
 export function SkillsCard({ skills, totalSkills }: { skills: Skill[]; totalSkills: number }) {
   const unlocked = skills.filter((s) => s.status === 'mastered' || s.status === 'in-progress').length;
   return (
-    <section aria-labelledby="skills" className="flex flex-col gap-4 rounded-[28px] border-[2.5px] border-ink bg-white p-6">
+    <section aria-labelledby="skills" className="flex flex-col gap-3 rounded-[22px] border-4 border-room-ink bg-white p-5 shadow-[0_4px_0_var(--color-room-ink)]">
       <div className="flex items-baseline justify-between gap-3">
         <h2 id="skills" className="font-heading text-2xl font-extrabold leading-tight">
           Pip’s skills
@@ -41,18 +41,18 @@ export function SkillsCard({ skills, totalSkills }: { skills: Skill[]; totalSkil
         </span>
       </div>
 
-      <ul className="flex flex-col divide-y-2 divide-border">
+      <ul className="flex flex-col divide-y-[3px] divide-dashed divide-room-ink/15">
         {skills.map((skill) => {
           const locked = skill.status === 'locked';
           const Icon = locked ? LockIcon : ICONS[skill.icon];
           return (
             <li key={skill.id} className={`flex items-center gap-3 py-3 ${locked ? 'opacity-60' : ''}`}>
               <span
-                className={`flex size-10 shrink-0 items-center justify-center rounded-xl border-2 ${
-                  locked ? 'border-border bg-ground' : `border-ink ${TILE[skill.icon]}`
+                className={`flex size-10 shrink-0 items-center justify-center rounded-xl border-[3px] ${
+                  locked ? 'border-room-ink/30 bg-room-track' : `border-room-ink ${TILE[skill.icon]}`
                 }`}
               >
-                <Icon size={20} />
+                <Icon size={20} strokeWidth={2.6} />
               </span>
               <div className="flex min-w-0 flex-1 flex-col">
                 <span className="font-heading text-base font-bold">{skill.name}</span>
@@ -68,8 +68,8 @@ export function SkillsCard({ skills, totalSkills }: { skills: Skill[]; totalSkil
                   {Array.from({ length: skill.maxLevel }, (_, i) => (
                     <span
                       key={i}
-                      className={`size-2.5 rounded-full ${
-                        i < skill.level ? (skill.status === 'mastered' ? 'bg-mint' : 'bg-pip-blue') : 'bg-border'
+                      className={`size-3 rounded-full border-2 border-room-ink ${
+                        i < skill.level ? (skill.status === 'mastered' ? 'bg-room-green' : 'bg-room-blue') : 'bg-white'
                       }`}
                     />
                   ))}

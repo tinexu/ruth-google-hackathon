@@ -35,6 +35,12 @@
   --color-room-sky: #c3dbe8;
   --color-room-cork: #cc9459;
   --color-room-cork-frame: #8a5426;
+  --color-room-green: #5e9670;
+  --color-room-orange: #d3946a;
+  --color-room-track: #e4e7ef;
+  --color-room-note-sun: #faefbf;
+  --color-room-note-mint: #d8eedc;
+  --color-room-note-pink: #f6e0d6;
 }
 
 html,
@@ -175,4 +181,53 @@ h4,
     -1.5px 0 0 var(--color-room-ink),
     0 1.5px 0 var(--color-room-ink),
     0 -1.5px 0 var(--color-room-ink);
+}
+
+/* The suggested object in the room breathes a yellow glow */
+@keyframes room-glow {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 4px var(--color-room-sun),
+      0 0 0 3px var(--color-room-ink),
+      0 0 0 0 rgba(232, 201, 100, 0.7);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 4px var(--color-room-sun),
+      0 0 0 3px var(--color-room-ink),
+      0 0 0 14px rgba(232, 201, 100, 0);
+  }
+}
+
+.room-glow {
+  animation: room-glow 1.8s ease-in-out infinite;
+}
+
+/* Its label bobs gently so it reads as "look here" */
+@keyframes room-bob {
+  0%,
+  100% {
+    transform: translate(-50%, 0);
+  }
+  50% {
+    transform: translate(-50%, -5px);
+  }
+}
+
+.room-bob {
+  animation: room-bob 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .room-glow {
+    animation: none;
+    box-shadow:
+      inset 0 0 0 4px var(--color-room-sun),
+      0 0 0 3px var(--color-room-ink);
+  }
+  .room-bob {
+    animation: none;
+    transform: translate(-50%, 0);
+  }
 }

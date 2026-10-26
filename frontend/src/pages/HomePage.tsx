@@ -11,10 +11,12 @@ import { dailyQuests, isDone, nextStep } from '../components/home/quests';
 import { RoomScene } from '../components/room/RoomScene';
 import { RoomToolbar } from '../components/room/RoomToolbar';
 import { RoomPanel } from '../components/room/RoomPanel';
+import { RoomHint } from '../components/room/RoomHint';
+import { pipSays } from '../components/room/pipSays';
 import type { RoomAction, RoomPanel as Panel } from '../components/room/roomSpots';
 
-// Which bottom button lights up for the suggested next step.
-const TOOL_FOR_PAGE: Record<string, string> = { '/feed': 'learn', '/battle': 'battle', '/train': 'train' };
+// Which bottom button lights up with the suggested object in the room.
+const TOOL_FOR_SPOT: Record<string, string> = { computer: 'learn', arcade: 'battle', dumbbell: 'train' };
 
 function LevelShield({ level, size = 52 }: { level: number; size?: number }) {
   return (
@@ -55,6 +57,7 @@ export function HomePage() {
   const quests = dailyQuests(today);
   const questsLeft = quests.filter((q) => !isDone(q)).length;
   const next = nextStep(quests, lowest);
+  const say = pipSays(quests, lowest);
 
   const levelStart = pet.levelStartXp ?? 0;
   const levelEnd = pet.nextLevelXp ?? levelStart + 100;
@@ -114,10 +117,12 @@ export function HomePage() {
           </button>
         </div>
 
+        <RoomHint />
+
         {/* The room, in a chunky blue game frame */}
         <div className="w-full rounded-[30px] border-[5px] border-room-ink bg-room-blue p-2 shadow-[inset_0_-6px_0_rgba(0,0,0,0.2),0_8px_0_var(--color-room-ink)] sm:rounded-[38px] sm:p-3">
           <div className="relative aspect-[1200/760] overflow-hidden rounded-[22px] border-[5px] border-room-ink sm:rounded-[26px]">
-            <RoomScene onAction={act} />
+            <RoomScene onAction={act} suggested={say.spot} bubble={say} />
 
             <div className="hidden lg:block">
               <button
@@ -152,15 +157,15 @@ export function HomePage() {
               </button>
 
               <div className="absolute bottom-2.5 left-1/2 -translate-x-1/2">
-                <RoomToolbar variant="bar" highlight={TOOL_FOR_PAGE[next.to]} onAction={act} />
+                <RoomToolbar variant="bar" highlight={TOOL_FOR_SPOT[say.spot]} onAction={act} />
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex w-full max-w-[640px] flex-col items-center gap-3 lg:hidden">
-          <p className="font-heading text-base font-extrabold">What should Pip do?</p>
-          <RoomToolbar variant="grid" highlight={TOOL_FOR_PAGE[next.to]} onAction={act} />
+          <p className="text-center font-heading text-base font-extrabold">{say.line}</p>
+          <RoomToolbar variant="grid" highlight={TOOL_FOR_SPOT[say.spot]} onAction={act} />
         </div>
 
         <p className="hidden text-base font-bold lg:block">Tap anything in your room, or use the buttons along the bottom.</p>
@@ -177,7 +182,7 @@ export function HomePage() {
       </RoomPanel>
 
       <RoomPanel open={panel === 'checkup'} title="Pip’s Checkup" onClose={() => setPanel(null)}>
-        <div className="flex flex-col gap-4 rounded-[22px] border-[5px] border-room-ink bg-ground p-4 sm:p-5">
+        <div className="flex flex-col gap-4 rounded-[22px] border-[5px] border-room-ink bg-[#e1ebf2] p-4 sm:p-5">
           <section
             aria-label="Pip’s level"
             className="flex items-center gap-3.5 rounded-[18px] border-4 border-room-ink bg-white px-4 py-3 shadow-[0_4px_0_var(--color-room-ink)]"

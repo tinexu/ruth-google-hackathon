@@ -37,6 +37,17 @@ function write(key: string, value: unknown): void {
   }
 }
 
+// ---------- One-time hints ----------
+
+/** Whether this kid has already dismissed a one-time hint (e.g. the room's "tap things" tip). */
+export function hasSeenHint(hint: string): boolean {
+  return read<boolean>(`pip.hint.${hint}.v1`, false);
+}
+
+export function markHintSeen(hint: string): void {
+  write(`pip.hint.${hint}.v1`, true);
+}
+
 // ---------- Current set ----------
 
 export function loadCurrentSet(): FeedSet | null {

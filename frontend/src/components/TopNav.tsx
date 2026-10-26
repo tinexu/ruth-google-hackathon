@@ -1,4 +1,4 @@
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { PipMascot } from './PipMascot';
 import { Pill } from './Pill';
 import {
@@ -15,7 +15,7 @@ const TABS = [
   { to: '/feed', label: 'Feed', icon: FeedIcon },
   { to: '/train', label: 'Train', icon: DumbbellIcon },
   { to: '/battle', label: 'Battle', icon: ZapIcon },
-  { to: '/', label: 'My Pip', icon: PawIcon, end: true },
+  { to: '/', label: 'Room', icon: PawIcon, end: true },
   { to: '/community', label: 'Community', icon: UsersIcon },
   { to: '/settings', label: 'Settings', icon: SettingsIcon },
 ];
@@ -26,6 +26,9 @@ interface TopNavProps {
 }
 
 export function TopNav({ streakDays, xp }: TopNavProps) {
+  // In the room, the room itself (and its round buttons) is the navigation, so
+  // the tabs step aside instead of offering a second way to the same places.
+  const inRoom = useLocation().pathname === '/';
   return (
     <header className="w-full border-b border-nav-border bg-nav">
       <div className="mx-auto flex max-w-[1360px] items-center justify-between gap-2 px-3 py-3 sm:gap-4 sm:px-6">
@@ -40,7 +43,7 @@ export function TopNav({ streakDays, xp }: TopNavProps) {
         </Link>
 
         {/* Icons only on narrow screens so the bar never runs off the edge; labels stay for screen readers. */}
-        <nav className="flex min-w-0 items-center gap-0.5 sm:gap-1" aria-label="Main">
+        <nav className={`min-w-0 items-center gap-0.5 sm:gap-1 ${inRoom ? 'hidden' : 'flex'}`} aria-label="Main">
           {TABS.map(({ to, label, icon: Icon, end }) => (
             <NavLink
               key={to}
