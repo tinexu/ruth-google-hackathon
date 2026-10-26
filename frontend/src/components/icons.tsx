@@ -172,3 +172,12 @@ export const EyeIcon = (p: IconProps) => (
 export const AboutIcon = (p: IconProps) => (
   <svg {...base({ strokeWidth: 2.4, ...p })}><circle cx="12" cy="12" r="9" /><path d="M12 11v5.5M12 7.5v.5" /></svg>
 );
+export const HeartIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+);
+export const QuestsIcon = (p: IconProps) => (
+  <svg {...base(p)}><path d="M5 4h11v16H5zM16 8h3v10a2 2 0 0 1-3 0M8 8h5M8 12h5M8 16h3" /></svg>
+);
+export const ComputerIcon = (p: IconProps) => (
+  <svg {...base(p)}><rect x="3" y="4" width="18" height="12" rx="2" /><path d="M9 20h6M12 16v4" /></svg>
+);

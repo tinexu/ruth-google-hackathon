@@ -26,6 +26,15 @@
   --color-coral-ink: #a3361a;
   --color-mint-light: #d7f5e4;
   --color-sun-ink: #4a3a05;
+
+  /* Pip's room (Club Penguin-style home): flat, softened primaries with bold near-black outlines */
+  --color-room-ink: #1c1410;
+  --color-room-blue: #4c6cb8;
+  --color-room-sun: #e8c964;
+  --color-room-red: #c86560;
+  --color-room-sky: #c3dbe8;
+  --color-room-cork: #cc9459;
+  --color-room-cork-frame: #8a5426;
 }
 
 html,
@@ -142,4 +151,28 @@ h4,
   .deepfake-mouth {
     animation: none;
   }
+}
+
+/* Chunky white lettering with an ink outline, for titles over the room */
+.room-title {
+  color: #fff;
+  text-shadow:
+    3px 0 0 var(--color-room-ink),
+    -3px 0 0 var(--color-room-ink),
+    0 3px 0 var(--color-room-ink),
+    0 -3px 0 var(--color-room-ink),
+    2px 2px 0 var(--color-room-ink),
+    -2px -2px 0 var(--color-room-ink),
+    2px -2px 0 var(--color-room-ink),
+    -2px 2px 0 var(--color-room-ink),
+    0 5px 0 var(--color-room-ink);
+}
+
+.room-label {
+  color: #fff;
+  text-shadow:
+    1.5px 0 0 var(--color-room-ink),
+    -1.5px 0 0 var(--color-room-ink),
+    0 1.5px 0 var(--color-room-ink),
+    0 -1.5px 0 var(--color-room-ink);
 }
