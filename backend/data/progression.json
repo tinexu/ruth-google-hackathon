@@ -1,0 +1,180 @@
+{
+  "_comment": "Game rules content: stat labels, skills, levels and growth tiers. Every number a kid sees is calculated from their own activity in backend/src/progress/rules.ts.",
+  "petName": "Pip",
+  "levelXp": [
+    0,
+    100,
+    200,
+    300,
+    500,
+    700,
+    950,
+    1250,
+    1600,
+    2000,
+    2450,
+    2950
+  ],
+  "levelXpAfterTable": 500,
+  "stats": [
+    {
+      "key": "energy",
+      "label": "Energy",
+      "color": "sun",
+      "note": "Stays full when you learn every day"
+    },
+    {
+      "key": "brain",
+      "label": "Brain",
+      "color": "pip-blue",
+      "note": "Grows with feed cards you get right"
+    },
+    {
+      "key": "muscle",
+      "label": "Muscle",
+      "color": "coral",
+      "note": "Grows when you keep training"
+    },
+    {
+      "key": "promptPower",
+      "label": "Prompt power",
+      "color": "coral",
+      "note": "Grows when you win Prompt Battles"
+    },
+    {
+      "key": "friendship",
+      "label": "Friendship",
+      "color": "mint",
+      "note": "Grows when Pip plays in Community"
+    }
+  ],
+  "skills": [
+    {
+      "id": "fake-fact-detective",
+      "name": "Fake-fact detective",
+      "icon": "search",
+      "description": "Pip can spot when AI makes things up.",
+      "unlockLevel": 1,
+      "metric": "feedCorrect",
+      "thresholds": [
+        3,
+        10,
+        25
+      ],
+      "hint": "Get Feed cards right to level it up."
+    },
+    {
+      "id": "how-ai-learns",
+      "name": "How AI learns",
+      "icon": "bulb",
+      "description": "Pip knows AI learns patterns from examples.",
+      "unlockLevel": 1,
+      "metric": "teachFixed",
+      "thresholds": [
+        1,
+        3,
+        5
+      ],
+      "hint": "Fix Pip’s blind spots in Train."
+    },
+    {
+      "id": "prompt-crafter",
+      "name": "Prompt crafter",
+      "icon": "pencil",
+      "description": "Pip writes clear asks with colors and details.",
+      "unlockLevel": 1,
+      "metric": "battleGood",
+      "thresholds": [
+        1,
+        2,
+        3
+      ],
+      "hint": "Score 60+ in Prompt Battle rounds."
+    },
+    {
+      "id": "safety-shield",
+      "name": "Safety shield",
+      "icon": "shield",
+      "description": "Pip never shares passwords or addresses.",
+      "unlockLevel": 2,
+      "metric": "safetyFixed",
+      "thresholds": [
+        1,
+        2,
+        3
+      ],
+      "hint": "Fix the privacy, voice-call and scam cards in Train."
+    },
+    {
+      "id": "fair-judge",
+      "name": "Fair judge",
+      "icon": "scale",
+      "description": "Pip learns from balanced examples, not just one kind.",
+      "unlockLevel": 3,
+      "metric": "teachFixed",
+      "thresholds": [
+        2,
+        4,
+        5
+      ],
+      "hint": "Fix more blind spots in Train."
+    },
+    {
+      "id": "real-or-ai-eye",
+      "name": "Real or AI eye",
+      "icon": "eye",
+      "description": "Pip can spot AI-made pictures.",
+      "unlockLevel": 5,
+      "metric": "feedCorrect",
+      "thresholds": [
+        20,
+        40,
+        60
+      ],
+      "hint": "Keep getting Feed cards right."
+    }
+  ],
+  "totalSkills": 8,
+  "safetyCardIds": [
+    "privacy-safe-to-post",
+    "voice-clone-call",
+    "scam-perfect-grammar"
+  ],
+  "tiers": [
+    {
+      "tier": "sprout",
+      "name": "Sprout",
+      "levelRange": "Lv 1-2",
+      "description": "just a little bot",
+      "startLevel": 1,
+      "petTitle": "Little sprout"
+    },
+    {
+      "tier": "explorer",
+      "name": "Explorer",
+      "levelRange": "Lv 3-5",
+      "description": "arms, legs, antenna",
+      "startLevel": 3,
+      "petTitle": "Curious explorer",
+      "upgradeDescription": "Reach Level 3 and Pip becomes an Explorer: arms, legs and an antenna."
+    },
+    {
+      "tier": "champ",
+      "name": "Champ",
+      "levelRange": "Lv 6-9",
+      "description": "muscles, headband, star",
+      "startLevel": 6,
+      "petTitle": "Mighty champ",
+      "upgradeDescription": "Reach Level 6 and Pip becomes a Champ: muscles, a headband and a star badge."
+    },
+    {
+      "tier": "legend",
+      "name": "Legend",
+      "levelRange": "Lv 10+",
+      "description": "crown, cape, medal",
+      "startLevel": 10,
+      "petTitle": "Legend",
+      "upgradeDescription": "Reach Level 10 and Pip becomes a Legend: a crown, a cape and a medal."
+    }
+  ]
+}

@@ -1,16 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { FeedApiError, fetchQuestionSet } from './api';
+import { reportFeedAnswer } from '../lib/api';
 import { makeBackupSet } from './backupQuestions';
 import {
   archiveSet,
   firstUnanswered,
   isSetComplete,
   loadCurrentSet,
-  recordAnswer,
   saveCurrentSet
 } from './storage';
 import type { FeedSet } from './types';
-import { XP_PER_CORRECT } from './types';
 
 export type FeedStatus = 'loading' | 'ready';
 
@@ -41,7 +40,8 @@ function backupNotice(err: unknown): string {
  * - Otherwise ask Gemini (through the server) for a new set of 4.
  * - If that fails, use the built-in practice cards so the page still works.
  */
-export function useFeedSet(): FeedState {
+/** `onXpEarned` gets the XP the server awarded for each answered card. */
+export function useFeedSet(onXpEarned?: (xp: number) => void): FeedState {
   const [status, setStatus] = useState<FeedStatus>('loading');
   const [set, setSet] = useState<FeedSet | null>(null);
   const [current, setCurrent] = useState(0);
@@ -109,9 +109,14 @@ export function useFeedSet(): FeedState {
       }
       saveCurrentSet(updated);
       setSet(updated);
-      recordAnswer(correct ? XP_PER_CORRECT : 0);
+      // The server decides the XP (each card counts once) and keeps the streak.
+      reportFeedAnswer({ setId: set.id, questionIndex: current, correct })
+        .then((r) => onXpEarned?.(r.xpEarned))
+        .catch(() => {
+          // Offline or signed out: the card still shows as answered here.
+        });
     },
-    [set, current]
+    [set, current, onXpEarned]
   );
 
   const next = useCallback(() => {

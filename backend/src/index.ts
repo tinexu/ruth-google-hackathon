@@ -3,27 +3,40 @@ import express from 'express';
 import cors from 'cors';
 import { existsSync } from 'node:fs';
 import path from 'node:path';
+import { requireUser } from './auth/sessions.js';
+import { authRouter } from './routes/auth.js';
 import { homeRouter } from './routes/home.js';
 import { feedRouter } from './routes/feed.js';
 import { battlesRouter } from './routes/battles.js';
 import { teachRouter } from './routes/teach.js';
 import { communityRouter } from './routes/community.js';
+import { progressRouter } from './routes/progress.js';
 
 const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
 
-app.use(cors());
+// The app and API share one origin (Vite proxies /api in dev; Express serves
+// the build in prod), so cross-origin requests are off unless CORS_ORIGIN names
+// a specific site. Cookies make an open CORS policy unsafe.
+if (process.env.CORS_ORIGIN) {
+  app.use(cors({ origin: process.env.CORS_ORIGIN, credentials: true }));
+}
 app.use(express.json({ limit: '4kb' }));
+
+app.get('/api/health', (_req, res) => {
+  res.json({ ok: true });
+});
+
+// Sign-up and log-in are open; everything else needs a signed-in kid.
+app.use('/api', authRouter);
+app.use('/api', requireUser);
 
 app.use('/api', homeRouter);
 app.use('/api', feedRouter);
 app.use('/api', battlesRouter);
 app.use('/api', teachRouter);
 app.use('/api', communityRouter);
-
-app.get('/api/health', (_req, res) => {
-  res.json({ ok: true });
-});
+app.use('/api', progressRouter);
 
 app.use('/api', (_req, res) => res.status(404).json({ error: 'Not found' }));
 

@@ -65,8 +65,10 @@ export function CommunityPage() {
   }
 
   const { className, leaderboard, growthStages, currentTier, nextUpgrade } = state.data;
-  const top3 = leaderboard.filter((e) => e.rank <= 3);
-  const rest = leaderboard.filter((e) => e.rank > 3);
+  // The podium needs three players; until then, everyone goes in the list.
+  const hasPodium = leaderboard.length >= 3;
+  const top3 = hasPodium ? leaderboard.filter((e) => e.rank <= 3) : [];
+  const rest = hasPodium ? leaderboard.filter((e) => e.rank > 3) : leaderboard;
   const maxXp = leaderboard[0]?.xp ?? 1;
 
   return (
@@ -98,18 +100,20 @@ export function CommunityPage() {
 
       <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="flex flex-col gap-6">
-          <PodiumCard top3={top3} />
+          {hasPodium && <PodiumCard top3={top3} />}
 
-          <Card border="solid" rounded="rounded-[28px]" className="flex flex-col gap-1 bg-white p-4">
-            {rest.map((entry, i) => (
-              <LeaderboardRow
-                key={entry.rank}
-                entry={entry}
-                maxXp={maxXp}
-                entryAbove={i === 0 ? top3[top3.length - 1] : rest[i - 1]}
-              />
-            ))}
-          </Card>
+          {rest.length > 0 && (
+            <Card border="solid" rounded="rounded-[28px]" className="flex flex-col gap-1 bg-white p-4">
+              {rest.map((entry, i) => (
+                <LeaderboardRow
+                  key={entry.rank}
+                  entry={entry}
+                  maxXp={maxXp}
+                  entryAbove={i === 0 ? top3[top3.length - 1] : rest[i - 1]}
+                />
+              ))}
+            </Card>
+          )}
         </div>
 
         <div className="flex flex-col gap-6">

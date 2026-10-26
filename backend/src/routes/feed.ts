@@ -7,6 +7,7 @@ import { readFile } from 'node:fs/promises';
 import { randomUUID, randomInt } from 'node:crypto';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { byUser, rateLimit } from '../rateLimit.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -191,7 +192,15 @@ async function askGemini(topicIds: number[]) {
 
 export const feedRouter = Router();
 
-feedRouter.post('/feed/questions', async (req, res) => {
+// Each set is a paid Gemini call, so cap how many sets one kid can ask for.
+const questionLimit = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 20,
+  key: byUser,
+  message: 'Pip needs a break from making new cards. Try again in a little while!',
+});
+
+feedRouter.post('/feed/questions', questionLimit, async (req, res) => {
   if (!GEMINI_API_KEY) {
     return res.status(503).json({ error: 'GEMINI_API_KEY is not set on the server.' });
   }

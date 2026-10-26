@@ -10,7 +10,9 @@ import type {
   TeachTrainRequest,
   TeachTrainResult,
 } from '../../../shared/types.js';
+import { userOf } from '../auth/sessions.js';
 import { loadTeachCards } from '../data.js';
+import { recordTeachFix, touchActiveDay } from '../progress/store.js';
 import { hasPhrase, normalize } from '../grading/match.js';
 
 export const teachRouter = Router();
@@ -91,8 +93,9 @@ teachRouter.post('/teach/:id/train', (req, res) => {
       coveredBy,
       pipSays: coveredBy ? card.pipFixed : card.pipMistake,
       explanation: coveredBy ? card.explanation : undefined,
-      xpEarned: coveredBy ? XP_PER_FIX : 0,
+      xpEarned: coveredBy ? recordTeachFix(userOf(res), card.id, XP_PER_FIX) : 0,
     };
+    if (!coveredBy) touchActiveDay(userOf(res));
     res.json(result);
   } catch (err) {
     console.error('Failed to train Pip:', err);
@@ -127,7 +130,7 @@ teachRouter.post('/teach/:id/answer', (req, res) => {
           ? "That card teaches me the same thing I already know, so I'd still get it wrong. Try another one."
           : 'Yikes, that card would teach me an unsafe habit. Try another one.',
       explanation: correct ? card.explanation : undefined,
-      xpEarned: correct ? XP_PER_FIX : 0,
+      xpEarned: correct ? recordTeachFix(userOf(res), card.id, XP_PER_FIX) : 0,
     };
     res.json(result);
   } catch (err) {

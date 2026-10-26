@@ -1,6 +1,6 @@
-// Saved progress, kept in the browser's localStorage.
-// Fine for a demo; with real accounts this moves to a database so progress,
-// the friends' scorecard and the teacher/parent report work across devices.
+// The kid's in-progress feed set and recent results, kept in the browser's
+// localStorage under their nickname so kids sharing a device don't mix sets.
+// XP, streaks and stats are saved on the server (see reportFeedAnswer).
 
 import { useSyncExternalStore } from 'react';
 import type { FeedSet, SetResult } from './types';
@@ -13,9 +13,16 @@ const KEYS = {
 
 const MAX_HISTORY = 50;
 
+let userPrefix = '';
+
+/** Call when a kid signs in (or with null on sign-out) so their saved set is the one loaded. */
+export function setStorageUser(username: string | null): void {
+  userPrefix = username ? `u.${username.toLowerCase()}.` : '';
+}
+
 function read<T>(key: string, fallback: T): T {
   try {
-    const raw = localStorage.getItem(key);
+    const raw = localStorage.getItem(userPrefix + key);
     return raw ? (JSON.parse(raw) as T) : fallback;
   } catch {
     return fallback;
@@ -24,7 +31,7 @@ function read<T>(key: string, fallback: T): T {
 
 function write(key: string, value: unknown): void {
   try {
-    localStorage.setItem(key, JSON.stringify(value));
+    localStorage.setItem(userPrefix + key, JSON.stringify(value));
   } catch {
     // Storage full or blocked (private mode): the page still works, it just won't remember.
   }

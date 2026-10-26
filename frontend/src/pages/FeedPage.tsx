@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
+import type { AppOutletContext } from '../lib/outlet';
 import { DoneCard } from '../feed/DoneCard';
 import { FeedSidebar } from '../feed/FeedSidebar';
 import { LoadingCard } from '../feed/LoadingCard';
@@ -7,7 +8,8 @@ import { useFeedSet } from '../feed/useFeedSet';
 
 // Route: /feed
 export function FeedPage() {
-  const feed = useFeedSet();
+  const { addXp } = useOutletContext<AppOutletContext>();
+  const feed = useFeedSet(addXp);
   const { status, set, current } = feed;
   const total = set?.questions.length ?? 0;
   const done = status === 'ready' && set !== null && current >= total;

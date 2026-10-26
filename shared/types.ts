@@ -326,6 +326,30 @@ export interface TeachAnswerResult {
   xpEarned: number;
 }
 
+// ---------- Accounts ----------
+
+export interface AuthRequest {
+  username: string;
+  password: string;
+  /** IANA time zone from the browser, e.g. "America/New_York"; streaks use it for day boundaries. */
+  timezone: string;
+}
+
+export interface AuthUser {
+  username: string;
+}
+
+/** POST /api/progress/feed: one answered feed card. */
+export interface FeedAnswerReport {
+  setId: string;
+  questionIndex: number;
+  correct: boolean;
+}
+
+export interface FeedAnswerResult {
+  xpEarned: number;
+}
+
 // ---------- Community ----------
 
 export type PetTier = 'sprout' | 'explorer' | 'champ' | 'legend';

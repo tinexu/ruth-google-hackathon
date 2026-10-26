@@ -1,6 +1,6 @@
-import { useState, type ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import type { HomeData } from '@shared/types';
+import type { AppOutletContext } from '../lib/outlet';
 import { getUnlockedSkillCount } from '../lib/derive';
 import { usePreferences, setPreference } from '../lib/settings';
 import { Card } from '../components/Card';
@@ -8,29 +8,14 @@ import { Pill } from '../components/Pill';
 import { Button } from '../components/Button';
 import { Toggle } from '../components/Toggle';
 import { PipMascot } from '../components/PipMascot';
-import { MailIcon, BellIcon, SpeakerIcon, CheckIcon } from '../components/icons';
-
-// Fixed for this demo — in a real account this would come from the
-// parent's own signup, not be hardcoded on the client.
-const PARENT_EMAIL = 'devstar2613@gcplab.me';
-
-type SendState = 'idle' | 'sending' | 'sent';
+import { MailIcon, BellIcon, SpeakerIcon } from '../components/icons';
 
 export function SettingsPage() {
-  const data = useOutletContext<HomeData>();
-  const { kid, pet, weekly, skills, totalSkills } = data;
+  const data = useOutletContext<AppOutletContext>();
+  const { kid, pet, weekly, skills, totalSkills, logOut } = data;
   const prefs = usePreferences();
-  const [sendState, setSendState] = useState<SendState>('idle');
 
   const unlockedCount = getUnlockedSkillCount(skills);
-
-  // Simulated for this demo — there's no email-sending backend yet, so this
-  // just mimics the request/response timing a real export would have.
-  function sendReportNow() {
-    if (sendState === 'sending') return;
-    setSendState('sending');
-    setTimeout(() => setSendState('sent'), 900);
-  }
 
   return (
     <main className="mx-auto max-w-[1360px] px-6 py-10">
@@ -50,6 +35,9 @@ export function SettingsPage() {
             <Pill tone="blueTint">{kid.xp} XP</Pill>
             <Pill tone="mint">{unlockedCount}/{totalSkills} skills</Pill>
           </div>
+          <Button variant="white" onClick={logOut} className="mt-3">
+            Log out
+          </Button>
         </Card>
 
         {/* parent reports — the essential safety feature */}
@@ -61,18 +49,15 @@ export function SettingsPage() {
             </h2>
           </div>
 
-          <div className="flex items-start justify-between gap-4 rounded-2xl bg-ground px-5 py-4">
+          <div className="flex items-start gap-3 rounded-2xl bg-ground px-5 py-4">
+            <MailIcon size={20} className="mt-0.5 shrink-0" />
             <div>
-              <p className="font-heading text-base font-bold text-ink">Share my progress with a parent</p>
-              <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
-                <MailIcon size={16} />
-                Weekly summaries go to <span className="font-semibold text-ink">{PARENT_EMAIL}</span>
-              </p>
-              <p className="mt-2 text-xs font-semibold text-coral">
-                🔒 Only a parent can turn this off — not from this device.
+              <p className="font-heading text-base font-bold text-ink">Email reports are coming soon</p>
+              <p className="mt-1 text-sm text-muted">
+                Accounts don't collect any email addresses yet. Soon a parent will be able to add
+                theirs and get a weekly summary like the one below.
               </p>
             </div>
-            <Toggle checked locked label="Share my progress with a parent (locked on)" />
           </div>
 
           <div className="rounded-2xl border-2 border-dashed border-ink/30 px-5 py-4">
@@ -85,19 +70,6 @@ export function SettingsPage() {
             </ul>
           </div>
 
-          <div className="flex items-center gap-3">
-            <Button
-              variant="sun"
-              icon={sendState === 'sent' ? <CheckIcon size={18} className="stroke-ink" /> : <MailIcon size={18} className="stroke-ink" />}
-              onClick={sendReportNow}
-              disabled={sendState === 'sending'}
-            >
-              {sendState === 'sending' ? 'Sending…' : sendState === 'sent' ? 'Sent!' : 'Send report now'}
-            </Button>
-            {sendState === 'sent' && (
-              <p className="text-sm font-semibold text-mint">Sent to {PARENT_EMAIL} just now.</p>
-            )}
-          </div>
         </Card>
       </div>
 

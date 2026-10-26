@@ -6,7 +6,9 @@ import type {
   PublicChallenge,
   SubmitRequest,
 } from '../../../shared/types.js';
+import { userOf } from '../auth/sessions.js';
 import { loadBattles } from '../data.js';
+import { recordBattle } from '../progress/store.js';
 import { gradeSubmission } from '../grading/index.js';
 
 export const battlesRouter = Router();
@@ -67,7 +69,10 @@ battlesRouter.post('/battles/:id/submit', async (req, res) => {
       res.status(404).json({ error: 'That battle does not exist.' } satisfies ApiError);
       return;
     }
-    res.json(await gradeSubmission(challenge, prompt, data.opponent.name));
+    const result = await gradeSubmission(challenge, prompt, data.opponent.name);
+    // XP only counts the first time a kid plays each round; replays still update their best score.
+    result.xpEarned = recordBattle(userOf(res), challenge.id, result.score, result.outcome, result.xpEarned);
+    res.json(result);
   } catch (err) {
     console.error('Failed to grade battle prompt:', err);
     res.status(500).json({ error: 'Pip could not grade that prompt.' } satisfies ApiError);

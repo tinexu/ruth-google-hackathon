@@ -20,9 +20,13 @@ tabs that link to placeholder pages.
 ```
 frontend/           React app (Vite)
 backend/            Express API
-  data/demo.json    demo kid/pet/stats/skills data
+  data/progression.json  stat labels, skills, levels, growth tiers
   src/index.ts       app entry
-  src/routes/home.ts GET /api/home
+  src/db.ts          SQLite database (accounts + activity)
+  src/auth/          passwords + session cookies
+  src/progress/      records activity; turns it into level, stats, leaderboard
+  src/routes/auth.ts POST /api/auth/signup|login|logout, GET /api/auth/me
+  src/routes/home.ts GET /api/home (the signed-in kid's data)
   data/battles.json  the 3 Prompt Battle challenges + answer keys
   src/routes/battles.ts  GET /api/battles, POST /api/battles/:id/submit
   src/grading/       rule-based mock grader (keyword checklists)
@@ -74,6 +78,28 @@ Reusable building blocks live in `frontend/src/components/`: `TopNav`,
 entirely by the `/api/home` response — the "needs care" stat and the
 "X of Y skills unlocked" count are both computed from the data
 (`frontend/src/lib/derive.ts`), not hardcoded.
+
+## Accounts and progress
+
+Anyone can make an account with a **nickname and password** (no email, so
+there's no password reset yet). Sign-up and log-in live at `/api/auth/*`;
+every other `/api` route needs a signed-in kid (an httpOnly `pip_session`
+cookie, passwords hashed with scrypt).
+
+- **Database:** one SQLite file (`backend/var/pip.sqlite` by default, git-ignored;
+  set `DATABASE_PATH` to move it). Tables: `users`, `sessions`, `activity` (one row
+  per feed card, battle round or Train card, so XP never counts twice) and
+  `active_days` (for streaks).
+- **Nothing about a kid is hard-coded.** `backend/src/progress/rules.ts` turns
+  their activity into level, streak, stats, skills, Pip's mood and the leaderboard.
+  Labels, skill rules, level thresholds and growth tiers live in
+  `backend/data/progression.json`.
+- **XP:** 20 per correct Feed card, 20 the first time a Train card is fixed, and
+  40 / 30 / 20 for winning, tying or losing a Battle round the first time. The
+  server awards it. Feed answers are checked in the browser (answers ship with
+  each set), so the server trusts them but counts each card once and rate-limits.
+- **Limits:** sign-up/log-in attempts per IP, Gemini question sets per kid (20/hour).
+- **CORS** is off unless `CORS_ORIGIN` names the one site allowed to call the API.
 
 ## Prompt Battles
 

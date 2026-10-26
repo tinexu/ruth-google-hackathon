@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Routes, Route, Outlet, Navigate } from 'react-router-dom';
-import type { HomeData } from '@shared/types';
-import { fetchHomeData } from './lib/api';
+import type { AuthUser, HomeData } from '@shared/types';
+import { fetchHomeData, fetchMe, logOut, setUnauthorizedHandler } from './lib/api';
+import { setStorageUser } from './feed/storage';
 import { TopNav } from './components/TopNav';
 import { PipMascot } from './components/PipMascot';
 import { HomePage } from './pages/HomePage';
@@ -10,10 +11,11 @@ import { SettingsPage } from './pages/SettingsPage';
 import { BattlePage } from './pages/BattlePage';
 import { TeachPage } from './pages/TeachPage';
 import { CommunityPage } from './pages/CommunityPage';
+import { AuthPage } from './pages/AuthPage';
 import type { AppOutletContext } from './lib/outlet';
 
-function Layout({ data, addXp }: { data: HomeData; addXp: (xp: number) => void }) {
-  const context: AppOutletContext = { ...data, addXp };
+function Layout({ data, addXp, logOut }: { data: HomeData; addXp: (xp: number) => void; logOut: () => void }) {
+  const context: AppOutletContext = useMemo(() => ({ ...data, addXp, logOut }), [data, addXp, logOut]);
   return (
     <div className="min-h-screen bg-ground">
       <TopNav streakDays={data.kid.streakDays} xp={data.kid.xp} />
@@ -47,38 +49,89 @@ function ErrorState({ message }: { message: string }) {
   );
 }
 
+type Session = { status: 'checking' } | { status: 'signed-out' } | { status: 'signed-in'; user: AuthUser };
+
 export default function App() {
+  const [session, setSession] = useState<Session>({ status: 'checking' });
   const [data, setData] = useState<HomeData | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
+
+  const signedOut = useCallback(() => {
+    setStorageUser(null);
+    setData(null);
+    setSession({ status: 'signed-out' });
+  }, []);
+
+  // Any API call that comes back 401 (e.g. the session ran out) lands here.
+  useEffect(() => {
+    setUnauthorizedHandler(signedOut);
+    return () => setUnauthorizedHandler(null);
+  }, [signedOut]);
 
   useEffect(() => {
     let cancelled = false;
-    fetchHomeData()
-      .then((d) => {
-        if (!cancelled) setData(d);
+    fetchMe()
+      .then((user) => {
+        if (cancelled) return;
+        if (user) {
+          setStorageUser(user.username);
+          setSession({ status: 'signed-in', user });
+        } else {
+          setSession({ status: 'signed-out' });
+        }
       })
       .catch((e: unknown) => {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Unknown error');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
     };
   }, []);
 
-  const addXp = useCallback((xp: number) => {
-    setData((d) => (d ? { ...d, kid: { ...d.kid, xp: d.kid.xp + xp } } : d));
+  const loadHome = useCallback(() => {
+    fetchHomeData()
+      .then((d) => {
+        setData(d);
+        setError(null);
+      })
+      .catch((e: unknown) => setError(e instanceof Error ? e.message : 'Unknown error'));
   }, []);
 
-  if (loading) return <LoadingState />;
-  if (error || !data) return <ErrorState message={error ?? 'No data returned.'} />;
+  const signedInUser = session.status === 'signed-in' ? session.user.username : null;
+  useEffect(() => {
+    if (signedInUser) loadHome();
+  }, [signedInUser, loadHome]);
+
+  // The server has already saved the XP; show it now and reload level, streak and stats.
+  const addXp = useCallback(
+    (xp: number) => {
+      if (xp > 0) setData((d) => (d ? { ...d, kid: { ...d.kid, xp: d.kid.xp + xp } } : d));
+      loadHome();
+    },
+    [loadHome],
+  );
+
+  const handleLogOut = useCallback(() => {
+    void logOut().finally(signedOut);
+  }, [signedOut]);
+
+  if (error && !data) return <ErrorState message={error} />;
+  if (session.status === 'checking') return <LoadingState />;
+  if (session.status === 'signed-out') {
+    return (
+      <AuthPage
+        onSignedIn={(user) => {
+          setStorageUser(user.username);
+          setSession({ status: 'signed-in', user });
+        }}
+      />
+    );
+  }
+  if (!data) return <LoadingState />;
 
   return (
     <Routes>
-      <Route element={<Layout data={data} addXp={addXp} />}>
+      <Route element={<Layout data={data} addXp={addXp} logOut={handleLogOut} />}>
         <Route path="/" element={<HomePage />} />
         <Route path="/feed" element={<FeedPage />} />
         <Route path="/train" element={<TeachPage />} />
