@@ -20,32 +20,37 @@
     {
       "key": "energy",
       "label": "Energy",
+      "about": "How awake and ready to learn Pip is. It’s full when you play every day and runs low if you take a few days off.",
       "color": "sun",
-      "note": "Stays full when you learn every day"
+      "note": "Stays full when you play every day."
     },
     {
       "key": "brain",
       "label": "Brain",
+      "about": "How good Pip is at spotting made-up facts and tricky AI stuff.",
       "color": "pip-blue",
-      "note": "Grows with feed cards you get right"
+      "note": "Grows with Feed cards you get right."
     },
     {
       "key": "muscle",
       "label": "Muscle",
+      "about": "How well you’ve trained Pip. Each blind spot you fix makes Pip’s training data stronger and fairer.",
       "color": "coral",
-      "note": "Grows when you keep training"
+      "note": "Grows when you fix Pip’s blind spots in Train."
     },
     {
       "key": "promptPower",
       "label": "Prompt power",
+      "about": "How clearly Pip can ask an AI for exactly what it wants.",
       "color": "coral",
-      "note": "Grows when you win Prompt Battles"
+      "note": "Grows with your best Prompt Battle scores."
     },
     {
       "key": "friendship",
       "label": "Friendship",
+      "about": "How close you and Pip are.",
       "color": "mint",
-      "note": "Grows when Pip plays in Community"
+      "note": "Grows a little each day you and Pip play together."
     }
   ],
   "skills": [

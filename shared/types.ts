@@ -48,7 +48,10 @@ export interface Stat {
   label: string;
   value: number; // 0-100
   color: StatColor;
+  /** How this stat grows, e.g. "Grows with feed cards you get right". */
   note: string;
+  /** What the stat means for Pip, shown behind the info button on My Pip. */
+  about?: string;
 }
 
 export interface Weekly {
