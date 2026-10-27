@@ -6,7 +6,11 @@ import { loadCommunityData } from './data.js';
 
 // Cheers live in a small JSON file next to the server (cwd is backend/, see index.ts).
 // Fine for the demo's single class; with real accounts this becomes a DB table.
-const cheersPath = path.join(process.cwd(), 'var', 'cheers.json');
+// On Vercel only /tmp is writable, and it's wiped whenever the function goes cold,
+// so deployed cheers last a while, then reset to the seeded ones.
+const cheersPath = process.env.VERCEL
+  ? path.join('/tmp', 'pip-cheers.json')
+  : path.join(process.cwd(), 'var', 'cheers.json');
 const MAX_RECEIVED = 20;
 
 export class CheerError extends Error {
