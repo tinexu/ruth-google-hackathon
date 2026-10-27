@@ -7,16 +7,40 @@ interface PipMascotProps {
   className?: string;
 }
 
+// A heart centred on (0, 0), about 30 wide.
+export const HEART = 'M0 -4 c-5 -7 -15 -3 -15 4 c0 7 9 11 15 16 c6 -5 15 -9 15 -16 c0 -7 -10 -11 -15 -4 Z';
+// Limbs and ear pods are a shade deeper than the head, like the reference art.
+const DEEP_BLUE = '#4C74F2';
+
+export const line = { strokeLinejoin: 'round' as const, strokeLinecap: 'round' as const };
+
+export function Eye({ cx, cy, r = 10.5 }: { cx: number; cy: number; r?: number }) {
+  return (
+    <g>
+      <circle cx={cx} cy={cy} r={r} className="fill-ink" />
+      <circle cx={cx + r * 0.35} cy={cy - r * 0.4} r={r * 0.38} className="fill-white" />
+    </g>
+  );
+}
+
+export function Sparkle({ x, y, r, className }: { x: number; y: number; r: number; className: string }) {
+  const k = r * 0.28;
+  return (
+    <path
+      d={`M${x} ${y - r} Q${x + k} ${y - k} ${x + r} ${y} Q${x + k} ${y + k} ${x} ${y + r} Q${x - k} ${y + k} ${x - r} ${y} Q${x - k} ${y - k} ${x} ${y - r} Z`}
+      className={`${className} stroke-ink`}
+      strokeWidth="2.5"
+      {...line}
+    />
+  );
+}
+
 /**
- * The Pip robot pet mascot. Pure inline SVG so it stays crisp at any
- * size and can be recolored/animated purely through CSS/props.
+ * The Pip robot pet mascot: a big round screen-face head, heart antenna, ear
+ * pods, a little body with a heart, and chunky arms (one waving). Pure inline
+ * SVG so it stays crisp at any size.
  */
-export function PipMascot({
-  mood = 'happy',
-  size = 220,
-  waving = true,
-  className = '',
-}: PipMascotProps) {
+export function PipMascot({ mood = 'happy', size = 220, waving = true, className = '' }: PipMascotProps) {
   return (
     <svg
       viewBox="0 0 240 260"
@@ -27,165 +51,67 @@ export function PipMascot({
       aria-label={`Pip the robot, feeling ${mood}`}
     >
       {/* floor shadow */}
-      <ellipse cx="120" cy="240" rx="62" ry="10" className="fill-ink/15" />
+      <ellipse cx="121" cy="236" rx="82" ry="9" className="fill-ink/15" />
 
-      {/* sparkles */}
-      <path
-        d="M34 76 L38 66 L42 76 L52 80 L42 84 L38 94 L34 84 L24 80 Z"
-        className="fill-sun stroke-ink"
-        strokeWidth="2"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M196 56 L198 50 L200 56 L206 58 L200 60 L198 66 L196 60 L190 58 Z"
-        className="fill-sun stroke-ink"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
+      <Sparkle x={36} y={52} r={14} className="fill-sun" />
+      <Sparkle x={218} y={44} r={10} className="fill-white" />
 
-      {/* resting left arm */}
-      <rect
-        x="48"
-        y="150"
-        width="26"
-        height="62"
-        rx="13"
-        className="fill-pip-blue stroke-ink"
-        strokeWidth="3"
-        transform="rotate(8 61 150)"
-      />
-
-      {/* waving / resting right arm */}
+      {/* arms (behind the body) */}
+      <rect x="40" y="140" width="26" height="54" rx="13" fill={DEEP_BLUE} className="stroke-ink" strokeWidth="4" transform="rotate(20 53 167)" />
       {waving ? (
-        <rect
-          x="162"
-          y="108"
-          width="24"
-          height="58"
-          rx="12"
-          className="fill-pip-blue stroke-ink"
-          strokeWidth="3"
-          transform="rotate(-150 174 160)"
-        />
+        <rect x="180" y="118" width="26" height="54" rx="13" fill={DEEP_BLUE} className="stroke-ink" strokeWidth="4" transform="rotate(40 193 145)" />
       ) : (
-        <rect
-          x="166"
-          y="150"
-          width="26"
-          height="62"
-          rx="13"
-          className="fill-pip-blue stroke-ink"
-          strokeWidth="3"
-          transform="rotate(-8 179 150)"
-        />
+        <rect x="176" y="140" width="26" height="54" rx="13" fill={DEEP_BLUE} className="stroke-ink" strokeWidth="4" transform="rotate(-20 189 167)" />
       )}
 
-      {/* body */}
-      <rect
-        x="68"
-        y="150"
-        width="104"
-        height="82"
-        rx="28"
-        className="fill-pip-blue stroke-ink"
-        strokeWidth="3"
-      />
-      {/* belly heart badge */}
-      <path
-        d="M120 196 c-10-12-26-4-26 8 c0 12 16 20 26 28 c10-8 26-16 26-28 c0-12-16-20-26-8 Z"
-        className="fill-pip-blue-light stroke-ink"
-        strokeWidth="2.5"
-      />
-
       {/* feet */}
-      <ellipse cx="95" cy="234" rx="16" ry="9" className="fill-ink" />
-      <ellipse cx="145" cy="234" rx="16" ry="9" className="fill-ink" />
+      <rect x="71" y="206" width="41" height="20" rx="10" className="fill-ink" />
+      <rect x="131" y="206" width="41" height="20" rx="10" className="fill-ink" />
 
-      {/* antenna stem + heart */}
-      <line x1="120" y1="18" x2="120" y2="2" className="stroke-ink" strokeWidth="3" />
-      <path
-        d="M120 2 c-5-7-15-3-15 4 c0 7 9 11 15 16 c6-5 15-9 15-16 c0-7-10-11-15-4 Z"
-        className="fill-coral stroke-ink"
-        strokeWidth="2.5"
-      />
+      {/* body with a yellow heart */}
+      <rect x="69" y="146" width="106" height="68" rx="26" className="fill-pip-blue stroke-ink" strokeWidth="4.5" />
+      <path d={HEART} transform="translate(121 192) scale(0.78)" className="fill-sun stroke-ink" strokeWidth="3.5" {...line} />
 
-      {/* head */}
-      <rect
-        x="40"
-        y="18"
-        width="160"
-        height="130"
-        rx="40"
-        className="fill-pip-blue stroke-ink"
-        strokeWidth="3.5"
-      />
-      {/* ear blocks */}
-      <rect
-        x="18"
-        y="64"
-        width="28"
-        height="52"
-        rx="14"
-        className="fill-pip-blue stroke-ink"
-        strokeWidth="3"
-      />
-      <rect
-        x="194"
-        y="64"
-        width="28"
-        height="52"
-        rx="14"
-        className="fill-pip-blue stroke-ink"
-        strokeWidth="3"
-      />
+      {/* ear pods */}
+      <rect x="29" y="76" width="18" height="42" rx="9" fill={DEEP_BLUE} className="stroke-ink" strokeWidth="4" />
+      <rect x="195" y="76" width="18" height="42" rx="9" fill={DEEP_BLUE} className="stroke-ink" strokeWidth="4" />
 
-      {/* face plate */}
-      <rect
-        x="62"
-        y="48"
-        width="116"
-        height="88"
-        rx="32"
-        className="fill-white stroke-ink"
-        strokeWidth="3"
-      />
+      {/* head and screen face */}
+      <rect x="42" y="36" width="158" height="120" rx="56" className="fill-pip-blue stroke-ink" strokeWidth="4.5" />
+      <rect x="63" y="58" width="116" height="79" rx="28" className="fill-white stroke-ink" strokeWidth="4" />
+
+      {/* heart antenna, sitting right on top of the head */}
+      <path d={HEART} transform="translate(121 22)" className="fill-coral stroke-ink" strokeWidth="3.5" {...line} />
 
       {mood === 'happy' && (
         <>
-          <circle cx="100" cy="90" r="8" className="fill-ink" />
-          <circle cx="140" cy="90" r="8" className="fill-ink" />
-          <ellipse cx="88" cy="110" rx="10" ry="6" className="fill-coral/60" />
-          <ellipse cx="152" cy="110" rx="10" ry="6" className="fill-coral/60" />
-          <path
-            d="M100 114 q20 16 40 0"
-            fill="none"
-            className="stroke-ink"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-          />
+          <Eye cx={95} cy={93} />
+          <Eye cx={147} cy={93} />
+          <ellipse cx="79" cy="113" rx="9.5" ry="5.5" className="fill-coral/50" />
+          <ellipse cx="163" cy="113" rx="9.5" ry="5.5" className="fill-coral/50" />
+          <path d="M105 112 q16 12 32 0" fill="none" className="stroke-ink" strokeWidth="4" {...line} />
         </>
       )}
       {mood === 'excited' && (
         <>
-          <circle cx="100" cy="88" r="9" className="fill-ink" />
-          <circle cx="140" cy="88" r="9" className="fill-ink" />
-          <ellipse cx="88" cy="110" rx="11" ry="7" className="fill-coral/60" />
-          <ellipse cx="152" cy="110" rx="11" ry="7" className="fill-coral/60" />
-          <path
-            d="M96 112 q24 22 48 0 q-4 14 -24 14 q-20 0 -24 -14 Z"
-            className="fill-ink"
-          />
+          <Eye cx={95} cy={91} r={12} />
+          <Eye cx={147} cy={91} r={12} />
+          <ellipse cx="78" cy="113" rx="10" ry="6" className="fill-coral/55" />
+          <ellipse cx="164" cy="113" rx="10" ry="6" className="fill-coral/55" />
+          <path d="M106 109 q15 20 30 0 Z" className="fill-ink stroke-ink" strokeWidth="3" {...line} />
+          <ellipse cx="121" cy="118.5" rx="6" ry="3" className="fill-coral" />
         </>
       )}
       {mood === 'worried' && (
         <>
-          <path d="M92 80 l16 5" className="stroke-ink" strokeWidth="3" strokeLinecap="round" />
-          <path d="M148 80 l-16 5" className="stroke-ink" strokeWidth="3" strokeLinecap="round" />
-          <circle cx="100" cy="94" r="7" className="fill-ink" />
-          <circle cx="140" cy="94" r="7" className="fill-ink" />
-          <ellipse cx="88" cy="112" rx="9" ry="5" className="fill-coral/60" />
-          <ellipse cx="152" cy="112" rx="9" ry="5" className="fill-coral/60" />
-          <ellipse cx="120" cy="120" rx="7" ry="6" className="fill-none stroke-ink" strokeWidth="3" />
+          <path d="M84 80 l15 -6 M158 80 l-15 -6" fill="none" className="stroke-ink" strokeWidth="3.5" {...line} />
+          <Eye cx={95} cy={95} r={9.5} />
+          <Eye cx={147} cy={95} r={9.5} />
+          <ellipse cx="79" cy="115" rx="9" ry="5" className="fill-coral/40" />
+          <ellipse cx="163" cy="115" rx="9" ry="5" className="fill-coral/40" />
+          <path d="M107 119 q3.5 -5 7 0 q3.5 5 7 0 q3.5 -5 7 0 q3.5 5 7 0" fill="none" className="stroke-ink" strokeWidth="3" {...line} />
+          {/* sweat drop */}
+          <path d="M184 52 q8 12 0 16 q-8 -4 0 -16 Z" className="fill-pip-blue-light stroke-ink" strokeWidth="2.5" {...line} />
         </>
       )}
     </svg>

@@ -1,13 +1,12 @@
 import { useEffect, useState } from 'react';
 import type { CommunityData } from '@shared/types';
-import { fetchCommunityData } from '../lib/api';
+import { fetchCheers, fetchCommunityData, sendCheer } from '../lib/api';
 import { PipMascot } from '../components/PipMascot';
 import { Card } from '../components/Card';
 import { ToggleGroup } from '../components/community/ToggleGroup';
 import { PodiumCard } from '../components/community/PodiumCard';
 import { LeaderboardRow } from '../components/community/LeaderboardRow';
-import { GrowthStageCard } from '../components/community/GrowthStageCard';
-import { NextUpgradeCard } from '../components/community/NextUpgradeCard';
+import { EvolutionCard } from '../components/community/EvolutionCard';
 
 type LoadState =
   | { status: 'loading' }
@@ -26,6 +25,8 @@ const AUDIENCE_OPTIONS = [
 export function CommunityPage() {
   const [state, setState] = useState<LoadState>({ status: 'loading' });
   const [timeframe, setTimeframe] = useState<(typeof TIME_OPTIONS)[number]['value']>('week');
+  // Who you've cheered today. If cheers can't load, the buttons still work and the server has the final say.
+  const [cheeredToday, setCheeredToday] = useState<string[]>([]);
   const [audience, setAudience] = useState<(typeof AUDIENCE_OPTIONS)[number]['value']>('friends');
 
   useEffect(() => {
@@ -38,6 +39,11 @@ export function CommunityPage() {
         if (!cancelled)
           setState({ status: 'error', message: e instanceof Error ? e.message : 'Unknown error' });
       });
+    fetchCheers()
+      .then((cheers) => {
+        if (!cancelled) setCheeredToday(cheers.cheeredToday);
+      })
+      .catch(() => {});
     return () => {
       cancelled = true;
     };
@@ -107,25 +113,15 @@ export function CommunityPage() {
                 entry={entry}
                 maxXp={maxXp}
                 entryAbove={i === 0 ? top3[top3.length - 1] : rest[i - 1]}
+                cheered={cheeredToday.includes(entry.petName)}
+                onCheer={async () => setCheeredToday((await sendCheer(entry.petName)).cheeredToday)}
               />
             ))}
           </Card>
         </div>
 
-        <div className="flex flex-col gap-6">
-          <Card border="solid" rounded="rounded-[28px]" className="bg-white p-6">
-            <p className="text-xs font-bold tracking-wide text-muted">HOW PETS GROW</p>
-            <h2 className="mt-1 font-heading text-xl font-extrabold text-ink">
-              Learn more, grow stronger
-            </h2>
-            <div className="mt-4 grid grid-cols-2 gap-3">
-              {growthStages.map((stage) => (
-                <GrowthStageCard key={stage.tier} stage={stage} isCurrent={stage.tier === currentTier} />
-              ))}
-            </div>
-          </Card>
-
-          <NextUpgradeCard upgrade={nextUpgrade} />
+        <div>
+          <EvolutionCard stages={growthStages} currentTier={currentTier} upgrade={nextUpgrade} />
         </div>
       </div>
     </main>

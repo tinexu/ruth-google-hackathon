@@ -241,7 +241,7 @@ export interface TeachExample {
 /** A picture or video the card's test case is about. `scene` picks the illustration to render. */
 export interface TeachMedia {
   kind: 'video' | 'image';
-  scene: 'deepfake-singer';
+  scene: 'deepfake-athlete';
   /** Describes the media for screen readers. */
   alt: string;
 }
@@ -367,4 +367,29 @@ export interface CommunityData {
   /** Which growth stage card gets the "You are here" badge. */
   currentTier: PetTier;
   nextUpgrade: NextUpgrade;
+}
+
+/** One cheer, sent from one pet's owner to another pet on the class leaderboard. */
+export interface Cheer {
+  id: string;
+  fromOwner: string;
+  fromPet: string;
+  /** So the receiver can see who cheered, drawn the way they look on the leaderboard. */
+  fromTier: PetTier;
+  fromColor: StatColor;
+  toOwner: string;
+  toPet: string;
+  /** ISO timestamp. */
+  at: string;
+}
+
+export interface CheersResponse {
+  /** Cheers for your pet, newest first. */
+  received: Cheer[];
+  /** Pet names you've already cheered today (one cheer per pet per day). */
+  cheeredToday: string[];
+}
+
+export interface SendCheerRequest {
+  toPet: string;
 }

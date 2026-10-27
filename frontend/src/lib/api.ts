@@ -2,8 +2,10 @@ import type {
   ApiError,
   BattleResult,
   BattlesResponse,
+  CheersResponse,
   CommunityData,
   HomeData,
+  SendCheerRequest,
   SubmitRequest,
   TeachAnswerRequest,
   TeachAnswerResult,
@@ -81,4 +83,16 @@ export function trainTeachCard(
 
 export function fetchCommunityData(): Promise<CommunityData> {
   return requestJson<CommunityData>('/api/community');
+}
+
+export function fetchCheers(): Promise<CheersResponse> {
+  return requestJson<CheersResponse>('/api/cheers');
+}
+
+export function sendCheer(toPet: string): Promise<CheersResponse> {
+  return requestJson<CheersResponse>('/api/cheers', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ toPet } satisfies SendCheerRequest),
+  });
 }

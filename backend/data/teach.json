@@ -26,10 +26,10 @@
       ],
       "media": {
         "kind": "video",
-        "scene": "deepfake-singer",
-        "alt": "Music video of a singer on stage. The edges of her jaw blur and shimmer when she moves, and the captions say her voice sounds flat and robotic."
+        "scene": "deepfake-athlete",
+        "alt": "Video posted by @maya.stone.offical of soccer star Maya Stone saying she is quitting soccer. Her face is a lighter skin tone than her neck and ears with a smudged edge, and it slides behind her head when she tilts. Her lips move a second after the captions, and her waving hand has six fingers."
       },
-      "testCase": "A new music video from a famous singer. Watch her jaw and listen to her voice.",
+      "testCase": "A video of soccer star Maya Stone saying she's quitting soccer forever. Watch the edges of her face, her lips and her waving hand.",
       "pipMistake": "Totally real!",
       "uhOh": "Uh oh. None of your examples showed Pip what a realistic deepfake looks like, so it trusted a normal-looking face. Which card should you add?",
       "choices": [
@@ -44,7 +44,7 @@
         {
           "letter": "B",
           "example": {
-            "label": "Blurry edges, flat voice",
+            "label": "Face edge doesn't match, lips out of sync",
             "verdict": "could be fake"
           },
           "kind": "fix"
@@ -66,8 +66,8 @@
           "kind": "unsafe"
         }
       ],
-      "pipFixed": "Blurry jaw, flat voice... could be a deepfake!",
-      "explanation": "Real deepfakes don't look silly. Clues like blurry edges, odd teeth or hands, and a flat voice matter more than whether a face looks normal.",
+      "pipFixed": "Her face doesn't match her neck, her lips are late, and that hand has six fingers. Probably a deepfake!",
+      "explanation": "Real deepfakes don't look silly. Check where the face meets the neck, whether the lips match the words, and count the fingers. Then ask: would this person really say this? Look for their real account.",
       "fixVerdict": "fake",
       "fixKeywords": [
         "blur",
@@ -79,20 +79,33 @@
         "teeth",
         "hands",
         "fingers",
-        "flat",
-        "robot",
-        "robotic",
         "glitch",
         "glitchy",
         "flicker",
         "lip sync",
         "lips",
         "shimmer",
-        "weird voice",
-        "voice sounds",
         "doesn't blink",
         "no blinking",
-        "melting"
+        "melting",
+        "seam",
+        "skin",
+        "color",
+        "colour",
+        "neck",
+        "match",
+        "sync",
+        "out of sync",
+        "late",
+        "six",
+        "6 fingers",
+        "extra finger",
+        "slide",
+        "slides",
+        "mask",
+        "account",
+        "spelled",
+        "offical"
       ]
     },
     {

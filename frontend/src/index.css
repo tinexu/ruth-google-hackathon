@@ -100,46 +100,28 @@ h4,
   }
 }
 
-/* Teach Pip deepfake video: a shimmering jaw line and a mouth that sings */
-@keyframes deepfake-glitch {
-  0%,
-  100% {
-    opacity: 0.9;
-    transform: translateX(0);
+/* a heart floats up off the Cheer button on the Community leaderboard */
+@keyframes cheer-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, 6px) scale(0.6);
   }
-  30% {
-    opacity: 0.4;
-    transform: translateX(3px);
-  }
-  60% {
+  25% {
     opacity: 1;
-    transform: translateX(-2px);
+    transform: translate(-50%, -8px) scale(1.15);
   }
-}
-
-@keyframes deepfake-mouth {
-  0%,
   100% {
-    transform: scaleY(1);
-  }
-  50% {
-    transform: scaleY(0.35);
+    opacity: 0;
+    transform: translate(-50%, -34px) scale(1);
   }
 }
 
-.deepfake-glitch {
-  animation: deepfake-glitch 0.9s steps(3) infinite;
-}
-
-.deepfake-mouth {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: deepfake-mouth 0.6s ease-in-out infinite;
+.cheer-float {
+  animation: cheer-float 900ms ease-out both;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .deepfake-glitch,
-  .deepfake-mouth {
-    animation: none;
+  .cheer-float {
+    display: none;
   }
 }

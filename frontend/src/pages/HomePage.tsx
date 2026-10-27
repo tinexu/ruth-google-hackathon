@@ -8,6 +8,7 @@ import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { StatBar } from '../components/StatBar';
 import { SkillCard } from '../components/SkillCard';
+import { CheersCard } from '../components/CheersCard';
 import { FeedIcon, ZapIcon, UsersIcon } from '../components/icons';
 
 export function HomePage() {
@@ -51,7 +52,7 @@ export function HomePage() {
           <SpeechBubble className="mt-6 max-w-sm self-start">{pet.speech}</SpeechBubble>
 
           <div className="flex flex-1 items-center justify-center py-4">
-            <PipMascot mood="happy" size={280} waving className="animate-pip-bounce" />
+            <PipMascot mood="happy" size={280} waving />
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-3">
@@ -100,6 +101,10 @@ export function HomePage() {
             <WeeklyStat value={weekly.fakesCaught} label="fakes caught" />
           </div>
         </Card>
+      </div>
+
+      <div className="mt-6">
+        <CheersCard petName={pet.name} />
       </div>
 
       {/* skills section */}

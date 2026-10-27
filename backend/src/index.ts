@@ -8,6 +8,7 @@ import { feedRouter } from './routes/feed.js';
 import { battlesRouter } from './routes/battles.js';
 import { teachRouter } from './routes/teach.js';
 import { communityRouter } from './routes/community.js';
+import { cheersRouter } from './routes/cheers.js';
 
 const app = express();
 const PORT = process.env.PORT ? Number(process.env.PORT) : 4000;
@@ -20,6 +21,7 @@ app.use('/api', feedRouter);
 app.use('/api', battlesRouter);
 app.use('/api', teachRouter);
 app.use('/api', communityRouter);
+app.use('/api', cheersRouter);
 
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true });

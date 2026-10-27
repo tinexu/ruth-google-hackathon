@@ -10,12 +10,31 @@ interface LeaderboardRowProps {
   maxXp: number;
   /** Who's directly ahead of this pet, for the "XP to pass" note on your own row. */
   entryAbove?: LeaderboardEntry;
+  /** You already cheered for this pet today (saved on the server). */
+  cheered: boolean;
+  /** Saves a cheer for this pet; rejects with a kid-friendly message. */
+  onCheer: () => Promise<void>;
 }
 
-export function LeaderboardRow({ entry, maxXp, entryAbove }: LeaderboardRowProps) {
-  const [greeted, setGreeted] = useState(false);
+export function LeaderboardRow({ entry, maxXp, entryAbove, cheered, onCheer }: LeaderboardRowProps) {
+  const [sending, setSending] = useState(false);
+  const [justCheered, setJustCheered] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const percent = Math.min(100, Math.round((entry.xp / maxXp) * 100));
   const xpToPass = entryAbove ? Math.max(0, entryAbove.xp - entry.xp) : 0;
+
+  async function cheer() {
+    setSending(true);
+    setError(null);
+    try {
+      await onCheer();
+      setJustCheered(true);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Could not send that cheer.');
+    } finally {
+      setSending(false);
+    }
+  }
 
   return (
     <div
@@ -57,14 +76,29 @@ export function LeaderboardRow({ entry, maxXp, entryAbove }: LeaderboardRowProps
             </span>
           )
         ) : (
-          <Button
-            variant={entry.justJoined ? 'mint' : 'white'}
-            onClick={() => setGreeted(true)}
-            disabled={greeted}
-            className="px-4 py-2 text-sm"
-          >
-            {greeted ? (entry.justJoined ? 'Said hi!' : 'Cheered!') : entry.justJoined ? 'Say hi' : 'Cheer'}
-          </Button>
+          <div className="relative">
+            <Button
+              variant={cheered ? 'white' : 'sun'}
+              onClick={cheer}
+              disabled={cheered || sending}
+              aria-label={cheered ? `Cheered ${entry.ownerName}` : `Cheer for ${entry.ownerName}`}
+              className="px-4 py-2 text-sm"
+            >
+              {cheered ? 'Cheered!' : 'Cheer'}
+            </Button>
+            {justCheered && (
+              <span aria-hidden="true" className="cheer-float pointer-events-none absolute -top-2 left-1/2 text-coral">
+                <svg width="22" height="22" viewBox="-16 -12 32 30">
+                  <path d="M0 -4 c-5 -7 -15 -3 -15 4 c0 7 9 11 15 16 c6 -5 15 -9 15 -16 c0 -7 -10 -11 -15 -4 Z" fill="currentColor" stroke="#1B2140" strokeWidth="2.5" />
+                </svg>
+              </span>
+            )}
+            {error && (
+              <p role="alert" className="absolute top-full right-0 mt-2 w-44 text-right text-xs font-semibold text-coral-ink">
+                {error}
+              </p>
+            )}
+          </div>
         )}
       </div>
     </div>
