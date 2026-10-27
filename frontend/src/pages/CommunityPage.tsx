@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { CommunityData } from '@shared/types';
-import { fetchCheers, fetchCommunityData, sendCheer } from '../lib/api';
+import { fetchCommunityData } from '../lib/api';
+import { sendCheer, useCheers } from '../lib/cheers';
 import { PipMascot } from '../components/PipMascot';
 import { Card } from '../components/Card';
 import { ToggleGroup } from '../components/community/ToggleGroup';
@@ -25,8 +26,7 @@ const AUDIENCE_OPTIONS = [
 export function CommunityPage() {
   const [state, setState] = useState<LoadState>({ status: 'loading' });
   const [timeframe, setTimeframe] = useState<(typeof TIME_OPTIONS)[number]['value']>('week');
-  // Who you've cheered today. If cheers can't load, the buttons still work and the server has the final say.
-  const [cheeredToday, setCheeredToday] = useState<string[]>([]);
+  const { cheeredToday } = useCheers();
   const [audience, setAudience] = useState<(typeof AUDIENCE_OPTIONS)[number]['value']>('friends');
 
   useEffect(() => {
@@ -39,11 +39,6 @@ export function CommunityPage() {
         if (!cancelled)
           setState({ status: 'error', message: e instanceof Error ? e.message : 'Unknown error' });
       });
-    fetchCheers()
-      .then((cheers) => {
-        if (!cancelled) setCheeredToday(cheers.cheeredToday);
-      })
-      .catch(() => {});
     return () => {
       cancelled = true;
     };
@@ -114,7 +109,7 @@ export function CommunityPage() {
                 maxXp={maxXp}
                 entryAbove={i === 0 ? top3[top3.length - 1] : rest[i - 1]}
                 cheered={cheeredToday.includes(entry.petName)}
-                onCheer={async () => setCheeredToday((await sendCheer(entry.petName)).cheeredToday)}
+                onCheer={() => sendCheer(entry.petName)}
               />
             ))}
           </Card>

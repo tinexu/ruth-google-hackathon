@@ -368,28 +368,3 @@ export interface CommunityData {
   currentTier: PetTier;
   nextUpgrade: NextUpgrade;
 }
-
-/** One cheer, sent from one pet's owner to another pet on the class leaderboard. */
-export interface Cheer {
-  id: string;
-  fromOwner: string;
-  fromPet: string;
-  /** So the receiver can see who cheered, drawn the way they look on the leaderboard. */
-  fromTier: PetTier;
-  fromColor: StatColor;
-  toOwner: string;
-  toPet: string;
-  /** ISO timestamp. */
-  at: string;
-}
-
-export interface CheersResponse {
-  /** Cheers for your pet, newest first. */
-  received: Cheer[];
-  /** Pet names you've already cheered today (one cheer per pet per day). */
-  cheeredToday: string[];
-}
-
-export interface SendCheerRequest {
-  toPet: string;
-}

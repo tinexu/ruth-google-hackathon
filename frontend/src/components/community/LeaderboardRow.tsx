@@ -10,30 +10,19 @@ interface LeaderboardRowProps {
   maxXp: number;
   /** Who's directly ahead of this pet, for the "XP to pass" note on your own row. */
   entryAbove?: LeaderboardEntry;
-  /** You already cheered for this pet today (saved on the server). */
+  /** You already cheered for this pet today (remembered in this browser). */
   cheered: boolean;
-  /** Saves a cheer for this pet; rejects with a kid-friendly message. */
-  onCheer: () => Promise<void>;
+  onCheer: () => void;
 }
 
 export function LeaderboardRow({ entry, maxXp, entryAbove, cheered, onCheer }: LeaderboardRowProps) {
-  const [sending, setSending] = useState(false);
   const [justCheered, setJustCheered] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const percent = Math.min(100, Math.round((entry.xp / maxXp) * 100));
   const xpToPass = entryAbove ? Math.max(0, entryAbove.xp - entry.xp) : 0;
 
-  async function cheer() {
-    setSending(true);
-    setError(null);
-    try {
-      await onCheer();
-      setJustCheered(true);
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Could not send that cheer.');
-    } finally {
-      setSending(false);
-    }
+  function cheer() {
+    onCheer();
+    setJustCheered(true);
   }
 
   return (
@@ -80,7 +69,7 @@ export function LeaderboardRow({ entry, maxXp, entryAbove, cheered, onCheer }: L
             <Button
               variant={cheered ? 'white' : 'sun'}
               onClick={cheer}
-              disabled={cheered || sending}
+              disabled={cheered}
               aria-label={cheered ? `Cheered ${entry.ownerName}` : `Cheer for ${entry.ownerName}`}
               className="px-4 py-2 text-sm"
             >
@@ -92,11 +81,6 @@ export function LeaderboardRow({ entry, maxXp, entryAbove, cheered, onCheer }: L
                   <path d="M0 -4 c-5 -7 -15 -3 -15 4 c0 7 9 11 15 16 c6 -5 15 -9 15 -16 c0 -7 -10 -11 -15 -4 Z" fill="currentColor" stroke="#1B2140" strokeWidth="2.5" />
                 </svg>
               </span>
-            )}
-            {error && (
-              <p role="alert" className="absolute top-full right-0 mt-2 w-44 text-right text-xs font-semibold text-coral-ink">
-                {error}
-              </p>
             )}
           </div>
         )}

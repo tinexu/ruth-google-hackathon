@@ -103,9 +103,7 @@ export function HomePage() {
         </Card>
       </div>
 
-      <div className="mt-6">
-        <CheersCard petName={pet.name} />
-      </div>
+      <CheersCard petName={pet.name} className="mt-6" />
 
       {/* skills section */}
       <section className="mt-12">
